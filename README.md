@@ -3,7 +3,7 @@
 - Esse repositório tem como objetivo desenvolver os algoritmos de computação gráfica para desenvolvimento da ferramenta paint.  
 
 
-## Linguagens de Programação e Banco Utilizados
+## Linguagens de Programação
 
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" width="50px"/>&nbsp;
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg" width="50px"/>
