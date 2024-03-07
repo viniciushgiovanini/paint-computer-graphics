@@ -44,13 +44,28 @@ class CanvaWidget extends StatefulWidget {
 class _CanvaWidgetState extends State<CanvaWidget> {
   List<Offset> points = [];
 
+  double width = 300;
+  double height = 300;
+
   @override
   Widget build(BuildContext context) {
-    return Container(child: MouseClickCoordinatesWidget(
-      onClick: (p0) {
-        print(p0);
-      },
-    ));
+    return Container(
+      child: CustomPaint(
+        size: Size(width, height),
+        painter: Canva(points),
+        child: MouseClickCoordinatesWidget(
+          onClick: (Offset offset) {
+            // Aqui você pode lidar com a posição clicada como desejado
+            setState(() {
+              points.add(offset);
+            });
+          },
+          width: width,
+          height: height,
+        ),
+      ),
+      // Adicione outros widgets abaixo, se necessário
+    );
   }
 }
 
@@ -58,47 +73,30 @@ class _CanvaWidgetState extends State<CanvaWidget> {
 // Classe do Painter
 // #####################
 
+class Canva extends CustomPainter {
+  List<Offset> points; // Use a lista de pontos passada como parâmetro
 
-// CustomPaint(
-//       size: Size(300, 300),
-//       painter: Canva(points),
-//     )
+  Canva(this.points);
 
-// class Canva extends CustomPainter {
-//   final List<Offset> points; // Use a lista de pontos passada como parâmetro
+  // Pinte o fundo com uma cor desejada
 
-//   Canva(this.points);
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color.fromARGB(255, 0, 0, 0)
+      ..strokeWidth = 10.0;
 
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     final paint = Paint()
-//       ..color = const Color.fromARGB(255, 0, 0, 0)
-//       ..strokeWidth = 5.0;
+    Paint backgroundPaint = Paint()..color = Color.fromARGB(127, 243, 240, 211);
+    canvas.drawRect(
+        Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
+    // Desenha todos os pontos na lista
+    points.forEach((point) {
+      canvas.drawPoints(PointMode.points, [point], paint); // Corrigindo aqui
+    });
+  }
 
-//     final double boxSize = 15;
-//     final double maxX = size.width;
-//     final double maxY = size.height;
-
-//     for (double i = 0; i <= maxX; i += boxSize) {
-//       canvas.drawLine(Offset(i, 0), Offset(i, maxY), paint);
-//     }
-
-//     for (double i = 0; i <= maxY; i += boxSize) {
-//       canvas.drawLine(Offset(0, i), Offset(maxX, i), paint);
-//     }
-
-//     Offset pontoEspecifico = Offset(300, 400);
-
-//     // Desenha todos os pontos na lista
-//     // points.forEach((point) {
-//     //   canvas.drawPoints(PointMode.points, [point], paint); // Corrigindo aqui
-//     // });
-
-//     canvas.drawPoints(PointMode.points, [pontoEspecifico], paint);
-//   }
-
-//   @override
-//   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-//     return false;
-//   }
-// }
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
