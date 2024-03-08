@@ -1,4 +1,4 @@
-# Desenvolvimento de Algoritmos do Paint Microsoft
+# Desenvolvimento de Algoritmos do Paint
 
 - Esse repositório tem como objetivo desenvolver os algoritmos de computação gráfica para desenvolvimento da ferramenta paint.  
 

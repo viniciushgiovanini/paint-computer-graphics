@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// imports arq
+import "./page/homepage.dart";
+
 void main() {
   runApp(const Home());
 }
@@ -16,16 +19,20 @@ class MyHomePage extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("PAINT",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(234, 255, 255, 255))),
-        backgroundColor: Color.fromARGB(255, 103, 233, 125),
-      ),
-    ));
+      home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("PAINT",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(234, 255, 255, 255))),
+            backgroundColor: Color.fromARGB(255, 103, 233, 125),
+          ),
+          body: Container(
+            decoration: BoxDecoration(color: Colors.blueGrey[900]),
+            child: ViewerInteractive(),
+          )),
+    );
   }
 }
