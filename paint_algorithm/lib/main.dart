@@ -29,7 +29,7 @@ class MyHomePage extends State<Home> {
                     color: Color.fromARGB(234, 255, 255, 255))),
             backgroundColor: Color.fromARGB(255, 103, 233, 125),
           ),
-          body: CanvaWidget()),
+          body: ViewerInteractive()),
     );
   }
 }
