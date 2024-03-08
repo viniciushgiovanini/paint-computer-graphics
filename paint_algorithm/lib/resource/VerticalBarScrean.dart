@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'GetIcon.dart';
 
 class VerticalBarScreen extends StatelessWidget {
   final List<Offset> points;
@@ -14,13 +15,16 @@ class VerticalBarScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          IconButton(
-            icon: Icon(Icons.clear),
-            iconSize: 35,
-            onPressed: () {
-              points.clear();
-            },
-          ),
+          getIcon(Icons.clear, 35.0, () {
+            points.clear();
+          })
+          // IconButton(
+          //   icon: Icon(Icons.clear),
+          //   iconSize: 35,
+          //   onPressed: () {
+          //     points.clear();
+          //   },
+          // ),
           // SizedBox(height: 20),
           // IconButton(
           //   icon: Icon(Icons.remove),

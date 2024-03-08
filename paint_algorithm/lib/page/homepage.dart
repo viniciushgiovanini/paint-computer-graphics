@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import "dart:ui";
 
 // Imports
-import "../resource/GetMouseLeftClick.dart";
+// import "../resource/GetMouseLeftClick.dart";
 import "../resource/VerticalBarScrean.dart";
+import '../resource/GetGestureDetector.dart';
 
 // ###########################
 // Classe do ViewerInteractive
@@ -26,13 +27,16 @@ class ViewerInteractive extends StatelessWidget {
             child: Container(
           height: height,
           child: InteractiveViewer(
-            boundaryMargin: const EdgeInsets.all(60.0),
+            boundaryMargin: const EdgeInsets.all(0.0),
             minScale: 0.1,
             maxScale: 60.0,
             child: CanvaWidget(
               points: points,
               width: width,
               height: height,
+              updatePoints: (updatedPointes) {
+                points.addAll(updatedPointes);
+              },
             ),
           ),
         )),
@@ -42,16 +46,19 @@ class ViewerInteractive extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CanvaWidget extends StatefulWidget {
   final List<Offset> points;
   final double width;
   final double height;
+  final Function(List<Offset>) updatePoints;
 
   CanvaWidget(
       {super.key,
-      required this.points,
       required this.width,
-      required this.height});
+      required this.height,
+      required this.points,
+      required this.updatePoints});
 
   @override
   State<CanvaWidget> createState() => _CanvaWidgetState();
@@ -68,15 +75,12 @@ class _CanvaWidgetState extends State<CanvaWidget> {
         child: CustomPaint(
           size: Size(widget.width, widget.height),
           painter: Canva(widget.points),
-          child: MouseClickCoordinatesWidget(
-            onClick: (Offset offset) {
+          child: GetGestureMouse(
+            attPoints: (pontos_att) {
               setState(() {
-                widget.points.add(offset);
-                print(offset);
+                widget.updatePoints(pontos_att);
               });
             },
-            width: widget.width,
-            height: widget.height,
           ),
         ),
       ),
