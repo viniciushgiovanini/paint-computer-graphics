@@ -8,19 +8,20 @@ class VerticalBarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      color: Color.fromARGB(255, 167, 166, 164),
+      width: 80,
+      color: Color.fromARGB(255, 103, 233, 125),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
             icon: Icon(Icons.clear),
+            iconSize: 35,
             onPressed: () {
               points.clear();
             },
           ),
-          // SizedBox(height: 20), // Espaçamento entre os botões
+          // SizedBox(height: 20),
           // IconButton(
           //   icon: Icon(Icons.remove),
           //   onPressed: () {

@@ -29,7 +29,10 @@ class MyHomePage extends State<Home> {
                     color: Color.fromARGB(234, 255, 255, 255))),
             backgroundColor: Color.fromARGB(255, 103, 233, 125),
           ),
-          body: ViewerInteractive()),
+          body: Container(
+            decoration: BoxDecoration(color: Colors.blueGrey[900]),
+            child: ViewerInteractive(),
+          )),
     );
   }
 }

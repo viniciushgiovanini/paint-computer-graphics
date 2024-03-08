@@ -5,67 +5,81 @@ import "dart:ui";
 import "../resource/GetMouseLeftClick.dart";
 import "../resource/VerticalBarScrean.dart";
 
+// ###########################
+// Classe do ViewerInteractive
+// ###########################
+
 // ignore: must_be_immutable
-class CanvaWidget extends StatefulWidget {
-  final List<Offset> points;
-
-  CanvaWidget({super.key, required this.points});
-
-  @override
-  State<CanvaWidget> createState() => _CanvaWidgetState();
-}
-
-class _CanvaWidgetState extends State<CanvaWidget> {
-  double width = 300;
-  double height = 300;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: CustomPaint(
-          size: Size(width, height),
-          painter: Canva(widget.points),
-          child: MouseClickCoordinatesWidget(
-            onClick: (Offset offset) {
-              setState(() {
-                widget.points.add(offset);
-              });
-            },
-            width: width,
-            height: height,
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class ViewerInteractive extends StatelessWidget {
   ViewerInteractive({super.key});
 
   final List<Offset> points = [];
-
+  final double width = 300;
+  final double height = 300.5;
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
             child: Container(
+          height: height,
           child: InteractiveViewer(
-            boundaryMargin: const EdgeInsets.all(0.0),
+            boundaryMargin: const EdgeInsets.all(60.0),
             minScale: 0.1,
             maxScale: 60.0,
-            child: Container(
-              child: CanvaWidget(
-                points: points,
-              ),
+            child: CanvaWidget(
+              points: points,
+              width: width,
+              height: height,
             ),
           ),
         )),
         VerticalBarScreen(points)
       ],
+    );
+  }
+}
+
+class CanvaWidget extends StatefulWidget {
+  final List<Offset> points;
+  final double width;
+  final double height;
+
+  CanvaWidget(
+      {super.key,
+      required this.points,
+      required this.width,
+      required this.height});
+
+  @override
+  State<CanvaWidget> createState() => _CanvaWidgetState();
+}
+
+// #####################
+// Classe do Canva
+// #####################
+class _CanvaWidgetState extends State<CanvaWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        child: CustomPaint(
+          size: Size(widget.width, widget.height),
+          painter: Canva(widget.points),
+          child: MouseClickCoordinatesWidget(
+            onClick: (Offset offset) {
+              setState(() {
+                widget.points.add(offset);
+                print(offset);
+              });
+            },
+            width: widget.width,
+            height: widget.height,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -85,19 +99,14 @@ class Canva extends CustomPainter {
       ..color = const Color.fromARGB(255, 0, 0, 0)
       ..strokeWidth = 1.0;
 
-    Paint backgroundPaint = Paint()..color = Color.fromARGB(127, 243, 240, 211);
+    // Paint backgroundPaint = Paint()..color = Color.fromARGB(127, 243, 240, 211);
+    Paint backgroundPaint = Paint()..color = Color.fromARGB(240, 255, 255, 255);
     canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
 
-    // Desenha todos os pontos na lista
     points.forEach((point) {
-      print(point);
-      print(point.dx.round());
-      print(point.dy.round());
-      canvas.drawPoints(
-          PointMode.points,
-          [Offset(point.dx.roundToDouble(), point.dy.roundToDouble())],
-          paint); // Corrigindo aqui
+      canvas.drawPoints(PointMode.points,
+          [Offset(point.dx.roundToDouble(), point.dy.roundToDouble())], paint);
     });
   }
 

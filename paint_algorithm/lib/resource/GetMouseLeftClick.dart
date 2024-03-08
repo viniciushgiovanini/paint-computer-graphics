@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MouseClickCoordinatesWidget extends StatelessWidget {
   final void Function(Offset) onClick;
 
