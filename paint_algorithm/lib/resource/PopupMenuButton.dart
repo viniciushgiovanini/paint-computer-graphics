@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 // Imports meu
-import '../algorithms/dda.dart';
+// import '../algorithms/dda.dart';
 
 Widget getPopUpMenuButtom(
   List<PopupMenuItem<String>> listadePopUp,
-  List<Offset> points,
-  void Function(List<Offset>) updatePoints,
+  void Function(String) updateMode,
 ) {
   List<PopupMenuEntry<String>> items = [];
 
@@ -17,25 +16,32 @@ Widget getPopUpMenuButtom(
     ));
   });
 
-  return PopupMenuButton<String>(
-    icon: Icon(Icons.code),
-    itemBuilder: (BuildContext context) => items,
-    onSelected: (String value) {
-      print(points);
-      if (value == "DDA") {
-        if (points.length == 2) {
-          points = paintDDA(points);
-          updatePoints(points);
-        } else {
-          List<Offset> ultimosElementos = [];
-          ultimosElementos.addAll(points.sublist(points.length - 2));
-          points.removeRange(points.length - 2, points.length);
+  // return PopupMenuButton<String>(
+  //   icon: Icon(Icons.code),
+  //   itemBuilder: (BuildContext context) => items,
+  //   onSelected: (String value) {
+  //     if (value == "DDA" && points.length != 0) {
+  //       if (points.length == 2) {
+  //         points = paintDDA(points);
+  //         updatePoints(points, "DDA");
+  //       } else {
+  //         List<Offset> ultimosElementos = [];
+  //         ultimosElementos.addAll(points.sublist(points.length - 2));
+  //         points.removeRange(points.length - 2, points.length);
 
-          ultimosElementos = paintDDA(ultimosElementos);
-          points.addAll(ultimosElementos);
-          updatePoints(points);
+  //         ultimosElementos = paintDDA(ultimosElementos);
+  //         points.addAll(ultimosElementos);
+  //         updatePoints(points, "DDA");
+  //       }
+  //     }
+  //   },
+  // );
+  return PopupMenuButton<String>(
+      icon: Icon(Icons.code),
+      itemBuilder: (BuildContext context) => items,
+      onSelected: (String value) {
+        if (value == "DDA") {
+          updateMode("DDA");
         }
-      }
-    },
-  );
+      });
 }

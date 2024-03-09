@@ -9,52 +9,13 @@ import '../resource/GetGestureDetector.dart';
 // ###########################
 // Classe do ViewerInteractive
 // ###########################
-
 // ignore: must_be_immutable
-
-// class ViewerInteractive extends StatelessWidget {
-//   ViewerInteractive({super.key});
-
-//   final List<Offset> points = [];
-//   final double width = 300;
-//   final double height = 300.5;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       crossAxisAlignment: CrossAxisAlignment.center,
-//       children: [
-//         Expanded(
-//             child: Container(
-//           height: height,
-//           child: InteractiveViewer(
-//             boundaryMargin: const EdgeInsets.all(0.0),
-//             minScale: 0.1,
-//             maxScale: 60.0,
-//             child: CanvaWidget(
-//               points: points,
-//               width: width,
-//               height: height,
-//               updatePoints: (updatedPoints) {
-//                 points.addAll(updatedPoints);
-//               },
-//             ),
-//           ),
-//         )),
-//         VerticalBarScreen(
-//           points: points,
-//           updatePoints: (updatedPoints) {
-//             // points.clear();
-//             // points.addAll(updatedPoints);
-//             print(points);
-//           },
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 class ViewerInteractive extends StatefulWidget {
-  const ViewerInteractive({super.key});
+  String mode_text;
+  void Function(String) updateStringMode;
+
+  ViewerInteractive(
+      {super.key, required this.mode_text, required this.updateStringMode});
 
   @override
   State<ViewerInteractive> createState() => _ViewerInteractiveState();
@@ -80,6 +41,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               points: points,
               width: width,
               height: height,
+              mode_text: widget.mode_text,
               updatePoints: (updatedPoints) {
                 points.addAll(updatedPoints);
               },
@@ -88,10 +50,10 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
         )),
         VerticalBarScreen(
           points: points,
-          updatePoints: (updatedPoints) {
+          updateMode: (txt_mode) {
             setState(() {
-              print(points);
-              "".toString();
+              widget.updateStringMode(txt_mode);
+              print("TXTMODE NO HOMEPAGE: $txt_mode");
             });
           },
         ),
@@ -107,12 +69,16 @@ class CanvaWidget extends StatefulWidget {
   final double height;
   final Function(List<Offset>) updatePoints;
 
-  CanvaWidget(
-      {super.key,
-      required this.width,
-      required this.height,
-      required this.points,
-      required this.updatePoints});
+  final String mode_text;
+
+  CanvaWidget({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.points,
+    required this.updatePoints,
+    required this.mode_text,
+  });
 
   @override
   State<CanvaWidget> createState() => _CanvaWidgetState();
@@ -122,6 +88,8 @@ class CanvaWidget extends StatefulWidget {
 // Classe do Canva
 // #####################
 class _CanvaWidgetState extends State<CanvaWidget> {
+  bool rodou_alg = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,9 +98,17 @@ class _CanvaWidgetState extends State<CanvaWidget> {
           size: Size(widget.width, widget.height),
           painter: Canva(widget.points),
           child: GetGestureMouse(
+            points: widget.points,
+            rodou_alg: rodou_alg,
+            mode_text: widget.mode_text,
             attPoints: (pontos_att) {
               setState(() {
                 widget.updatePoints(pontos_att);
+              });
+            },
+            updateRodouAlg: (details) {
+              setState(() {
+                rodou_alg = details;
               });
             },
           ),
@@ -163,8 +139,7 @@ class Canva extends CustomPainter {
         Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
 
     points.forEach((point) {
-      canvas.drawPoints(PointMode.points,
-          [Offset(point.dx.roundToDouble(), point.dy.roundToDouble())], paint);
+      canvas.drawPoints(PointMode.points, [point], paint);
     });
   }
 

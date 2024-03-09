@@ -6,10 +6,10 @@ import "PopupMenuButton.dart";
 
 class VerticalBarScreen extends StatefulWidget {
   final List<Offset> points;
-  final Function(List<Offset>) updatePoints;
+  final Function(String) updateMode;
 
   VerticalBarScreen(
-      {super.key, required this.points, required this.updatePoints});
+      {super.key, required this.points, required this.updateMode});
 
   @override
   State<VerticalBarScreen> createState() => _VerticalBarScreenState();
@@ -30,10 +30,13 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.delete, 35.0, () {
             widget.points.clear();
           }),
-          getPopUpMenuButtom([
-            PopupMenuItem(value: "DDA", child: Text("DDA")),
-            PopupMenuItem(value: "Bresenham", child: Text("Bresenham"))
-          ], widget.points, widget.updatePoints)
+          getPopUpMenuButtom(
+            [
+              PopupMenuItem(value: "DDA", child: Text("DDA")),
+              PopupMenuItem(value: "Bresenham", child: Text("Bresenham"))
+            ],
+            widget.updateMode,
+          )
         ],
       ),
     );
