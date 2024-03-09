@@ -1,48 +1,60 @@
 import 'package:flutter/material.dart';
 
-List<Offset> paintBresenham(List<Offset> points) {
+List<Offset> paintBresenhamGeneric(List<Offset> points) {
   int x1 = points[0].dx.roundToDouble().toInt();
   int y1 = points[0].dy.roundToDouble().toInt();
   int x2 = points[1].dx.roundToDouble().toInt();
   int y2 = points[1].dy.roundToDouble().toInt();
 
-  int d = 0;
+  int dx, dy, x, y, i, const1, const2, p, increx, increy;
 
-  int dx = (x2 - x1).abs();
-  int dy = (y2 - y1).abs();
-
-  int dx2 = 2 * dx;
-  int dy2 = 2 * dy;
-
-  int incrementalx = x1 < x2 ? 1 : -1;
-  int incrementaly = y1 < y2 ? 1 : -1;
-
-  int x = x1;
-  int y = y1;
+  dx = x2 - x1;
+  dy = y2 - y1;
+  if (dx >= 0) {
+    increx = 1;
+  } else {
+    increx = -1;
+    dx = -dx;
+  }
+  if (dy >= 0) {
+    increy = 1;
+  } else {
+    increy = -1;
+    dy = -dy;
+  }
+  x = x1;
+  y = y1;
 
   points.clear();
+  points.add(Offset(x.roundToDouble(), y.roundToDouble()));
 
-  if (dx >= dy) {
-    while (true) {
-      points.add(Offset(x.toDouble(), y.toDouble()));
-      if (x == x2) break;
-      x += incrementalx;
-      d += dy2;
-      if (d > dx) {
-        y += incrementaly;
-        d -= dx2;
+  if (dy < dx) {
+    p = 2 * dy - dx;
+    const1 = 2 * dy;
+    const2 = 2 * (dy - dx);
+    for (i = 0; i < dx; i++) {
+      x += increx;
+      if (p < 0) {
+        p += const1;
+      } else {
+        y += increy;
+        p += const2;
       }
+      points.add(Offset(x.roundToDouble(), y.roundToDouble()));
     }
   } else {
-    while (true) {
-      points.add(Offset(x.toDouble(), y.toDouble()));
-      if (y == y2) break;
-      y += incrementaly;
-      d += dx2;
-      if (d > dy) {
-        x += incrementalx;
-        d -= dy2;
+    p = 2 * dx - dy;
+    const1 = 2 * dx;
+    const2 = 2 * (dx - dy);
+    for (var i = 0; i < dy; i++) {
+      y += increy;
+      if (p < 0) {
+        p += const1;
+      } else {
+        x += increx;
+        p += const2;
       }
+      points.add(Offset(x.roundToDouble(), y.roundToDouble()));
     }
   }
 

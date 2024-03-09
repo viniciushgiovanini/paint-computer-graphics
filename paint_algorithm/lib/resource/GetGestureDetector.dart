@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // meus imports
 import '../algorithms/dda.dart';
-import "../algorithms/bresenham.dart";
+import '../algorithms/bresenham.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -32,25 +32,29 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
     return GestureDetector(
       onPanStart: (details) {
         setState(() {
-          if (!points_unico.contains(Offset(
-              details.localPosition.dx.roundToDouble(),
-              details.localPosition.dy.roundToDouble()))) {
-            points_unico.clear();
-            points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()));
-            widget.attPoints(points_unico);
+          if (widget.mode_text == "Painter") {
+            if (!points_unico.contains(Offset(
+                details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+              points_unico.clear();
+              points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              widget.attPoints(points_unico);
+            }
           }
         });
       },
       onPanUpdate: (details) {
         setState(() {
-          if (!points_unico.contains(Offset(
-              details.localPosition.dx.roundToDouble(),
-              details.localPosition.dy.roundToDouble()))) {
-            points_unico.clear();
-            points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()));
-            widget.attPoints(points_unico);
+          if (widget.mode_text == "Painter") {
+            if (!points_unico.contains(Offset(
+                details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+              points_unico.clear();
+              points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              widget.attPoints(points_unico);
+            }
           }
         });
       },
@@ -90,7 +94,7 @@ void checkDDAorBresenham(
       if (mode_text == "DDA") {
         points_unico = List<Offset>.from(paintDDA(points));
       } else if (mode_text == "Bresenham-Reta") {
-        points_unico = List<Offset>.from(paintBresenham(points));
+        points_unico = List<Offset>.from(paintBresenhamGeneric(points));
       }
       points.clear();
       attPoints(points_unico);
@@ -103,7 +107,7 @@ void checkDDAorBresenham(
       if (mode_text == "DDA") {
         ultimosElementos = paintDDA(ultimosElementos);
       } else if (mode_text == "Bresenham-Reta") {
-        ultimosElementos = paintBresenham(ultimosElementos);
+        ultimosElementos = paintBresenhamGeneric(ultimosElementos);
       }
       attPoints(ultimosElementos);
       updateRodouAlg(true);
