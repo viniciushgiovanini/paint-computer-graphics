@@ -62,31 +62,42 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               details.localPosition.dy.roundToDouble()));
           widget.attPoints(points_unico);
 
-          if (widget.mode_text == "DDA" &&
-              widget.points.length > 1 &&
-              !widget.rodou_alg) {
-            points_unico.clear();
-            if (widget.points.length == 2) {
-              points_unico = List<Offset>.from(paintDDA(widget.points));
-              widget.points.clear();
-              widget.attPoints(points_unico);
-              widget.updateRodouAlg(true);
-            } else {
-              List<Offset> ultimosElementos = [];
-              ultimosElementos
-                  .addAll(widget.points.sublist(widget.points.length - 2));
-              widget.points
-                  .removeRange(widget.points.length - 2, widget.points.length);
-
-              ultimosElementos = paintDDA(ultimosElementos);
-              widget.attPoints(ultimosElementos);
-              widget.updateRodouAlg(true);
-            }
-          } else {
-            widget.updateRodouAlg(false);
-          }
+          checkDDA(widget.mode_text, widget.points, widget.attPoints,
+              widget.updateRodouAlg, points_unico, widget.rodou_alg);
         }
       },
     );
+  }
+}
+
+// #################
+// Funcoes de Check
+// #################
+
+void checkDDA(
+    String mode_text,
+    List<Offset> points,
+    Function(List<Offset>) attPoints,
+    Function(bool) updateRodouAlg,
+    List<Offset> points_unico,
+    bool rodou_alg) {
+  if (mode_text == "DDA" && points.length > 1 && !rodou_alg) {
+    points_unico.clear();
+    if (points.length == 2) {
+      points_unico = List<Offset>.from(paintDDA(points));
+      points.clear();
+      attPoints(points_unico);
+      updateRodouAlg(true);
+    } else {
+      List<Offset> ultimosElementos = [];
+      ultimosElementos.addAll(points.sublist(points.length - 2));
+      points.removeRange(points.length - 2, points.length);
+
+      ultimosElementos = paintDDA(ultimosElementos);
+      attPoints(ultimosElementos);
+      updateRodouAlg(true);
+    }
+  } else {
+    updateRodouAlg(false);
   }
 }
