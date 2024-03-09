@@ -30,6 +30,9 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.delete, 35.0, () {
             widget.points.clear();
           }),
+          getIcon(Icons.brush, 35.0, () {
+            widget.updateMode("Painter");
+          }),
           getPopUpMenuButtom(
             [
               PopupMenuItem(value: "DDA", child: Text("DDA")),
