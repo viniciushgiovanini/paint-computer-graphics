@@ -17,7 +17,10 @@ Widget getPopUpMenuButtom(
   });
 
   return PopupMenuButton<String>(
-      icon: Icon(Icons.code),
+      icon: Icon(
+        Icons.straight,
+      ),
+      iconSize: 35.0,
       itemBuilder: (BuildContext context) => items,
       onSelected: (String value) {
         if (value == "DDA") {
