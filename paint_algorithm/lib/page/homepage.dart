@@ -12,9 +12,55 @@ import '../resource/GetGestureDetector.dart';
 
 // ignore: must_be_immutable
 
-class ViewerInteractive extends StatelessWidget {
-  ViewerInteractive({super.key});
+// class ViewerInteractive extends StatelessWidget {
+//   ViewerInteractive({super.key});
 
+//   final List<Offset> points = [];
+//   final double width = 300;
+//   final double height = 300.5;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       crossAxisAlignment: CrossAxisAlignment.center,
+//       children: [
+//         Expanded(
+//             child: Container(
+//           height: height,
+//           child: InteractiveViewer(
+//             boundaryMargin: const EdgeInsets.all(0.0),
+//             minScale: 0.1,
+//             maxScale: 60.0,
+//             child: CanvaWidget(
+//               points: points,
+//               width: width,
+//               height: height,
+//               updatePoints: (updatedPoints) {
+//                 points.addAll(updatedPoints);
+//               },
+//             ),
+//           ),
+//         )),
+//         VerticalBarScreen(
+//           points: points,
+//           updatePoints: (updatedPoints) {
+//             // points.clear();
+//             // points.addAll(updatedPoints);
+//             print(points);
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+class ViewerInteractive extends StatefulWidget {
+  const ViewerInteractive({super.key});
+
+  @override
+  State<ViewerInteractive> createState() => _ViewerInteractiveState();
+}
+
+class _ViewerInteractiveState extends State<ViewerInteractive> {
   final List<Offset> points = [];
   final double width = 300;
   final double height = 300.5;
@@ -34,13 +80,21 @@ class ViewerInteractive extends StatelessWidget {
               points: points,
               width: width,
               height: height,
-              updatePoints: (updatedPointes) {
-                points.addAll(updatedPointes);
+              updatePoints: (updatedPoints) {
+                points.addAll(updatedPoints);
               },
             ),
           ),
         )),
-        VerticalBarScreen(points)
+        VerticalBarScreen(
+          points: points,
+          updatePoints: (updatedPoints) {
+            setState(() {
+              print(points);
+              "".toString();
+            });
+          },
+        ),
       ],
     );
   }
