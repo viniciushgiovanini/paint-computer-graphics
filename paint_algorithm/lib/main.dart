@@ -15,6 +15,8 @@ class Home extends StatefulWidget {
 }
 
 class MyHomePage extends State<Home> {
+  String mode_text = "Painter";
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -23,15 +25,52 @@ class MyHomePage extends State<Home> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             centerTitle: true,
-            title: Text("PAINT",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(234, 255, 255, 255))),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "PAINT",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(234, 255, 255, 255),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Modo: $mode_text",
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: Color.fromARGB(234, 255, 255, 255),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             backgroundColor: Color.fromARGB(255, 103, 233, 125),
           ),
           body: Container(
             decoration: BoxDecoration(color: Colors.blueGrey[900]),
-            child: ViewerInteractive(),
+            child: ViewerInteractive(
+              mode_text: mode_text,
+              updateStringMode: (details) {
+                setState(() {
+                  mode_text = details;
+                });
+              },
+            ),
           )),
     );
   }

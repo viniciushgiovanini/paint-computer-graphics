@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
 
-class VerticalBarScreen extends StatelessWidget {
-  final List<Offset> points;
+// Imports meus
+import 'GetIcon.dart';
+import "PopupMenuButton.dart";
 
-  VerticalBarScreen(this.points);
+class VerticalBarScreen extends StatefulWidget {
+  final List<Offset> points;
+  final Function(String) updateMode;
+
+  VerticalBarScreen(
+      {super.key, required this.points, required this.updateMode});
+
+  @override
+  State<VerticalBarScreen> createState() => _VerticalBarScreenState();
+}
+
+class _VerticalBarScreenState extends State<VerticalBarScreen> {
+  // Função para atualizar os pontos e chamar setState
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +27,19 @@ class VerticalBarScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          IconButton(
-            icon: Icon(Icons.clear),
-            iconSize: 35,
-            onPressed: () {
-              points.clear();
-            },
-          ),
-          // SizedBox(height: 20),
-          // IconButton(
-          //   icon: Icon(Icons.remove),
-          //   onPressed: () {
-          //     // Ação do botão 2
-          //   },
-          // ),
+          getIcon(Icons.delete, 35.0, () {
+            widget.points.clear();
+          }),
+          getIcon(Icons.brush, 35.0, () {
+            widget.updateMode("Painter");
+          }),
+          getPopUpMenuButtom(
+            [
+              PopupMenuItem(value: "DDA", child: Text("DDA")),
+              PopupMenuItem(value: "Bresenham", child: Text("Bresenham"))
+            ],
+            widget.updateMode,
+          )
         ],
       ),
     );

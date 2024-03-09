@@ -2,18 +2,26 @@ import 'package:flutter/material.dart';
 import "dart:ui";
 
 // Imports
-import "../resource/GetMouseLeftClick.dart";
+// import "../resource/GetMouseLeftClick.dart";
 import "../resource/VerticalBarScrean.dart";
+import '../resource/GetGestureDetector.dart';
 
 // ###########################
 // Classe do ViewerInteractive
 // ###########################
-
 // ignore: must_be_immutable
+class ViewerInteractive extends StatefulWidget {
+  String mode_text;
+  void Function(String) updateStringMode;
 
-class ViewerInteractive extends StatelessWidget {
-  ViewerInteractive({super.key});
+  ViewerInteractive(
+      {super.key, required this.mode_text, required this.updateStringMode});
 
+  @override
+  State<ViewerInteractive> createState() => _ViewerInteractiveState();
+}
+
+class _ViewerInteractiveState extends State<ViewerInteractive> {
   final List<Offset> points = [];
   final double width = 300;
   final double height = 300.5;
@@ -26,32 +34,50 @@ class ViewerInteractive extends StatelessWidget {
             child: Container(
           height: height,
           child: InteractiveViewer(
-            boundaryMargin: const EdgeInsets.all(60.0),
+            boundaryMargin: const EdgeInsets.all(0.0),
             minScale: 0.1,
             maxScale: 60.0,
             child: CanvaWidget(
               points: points,
               width: width,
               height: height,
+              mode_text: widget.mode_text,
+              updatePoints: (updatedPoints) {
+                points.addAll(updatedPoints);
+              },
             ),
           ),
         )),
-        VerticalBarScreen(points)
+        VerticalBarScreen(
+          points: points,
+          updateMode: (txt_mode) {
+            setState(() {
+              widget.updateStringMode(txt_mode);
+            });
+          },
+        ),
       ],
     );
   }
 }
 
+// ignore: must_be_immutable
 class CanvaWidget extends StatefulWidget {
   final List<Offset> points;
   final double width;
   final double height;
+  final Function(List<Offset>) updatePoints;
 
-  CanvaWidget(
-      {super.key,
-      required this.points,
-      required this.width,
-      required this.height});
+  final String mode_text;
+
+  CanvaWidget({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.points,
+    required this.updatePoints,
+    required this.mode_text,
+  });
 
   @override
   State<CanvaWidget> createState() => _CanvaWidgetState();
@@ -61,6 +87,8 @@ class CanvaWidget extends StatefulWidget {
 // Classe do Canva
 // #####################
 class _CanvaWidgetState extends State<CanvaWidget> {
+  bool rodou_alg = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,15 +96,20 @@ class _CanvaWidgetState extends State<CanvaWidget> {
         child: CustomPaint(
           size: Size(widget.width, widget.height),
           painter: Canva(widget.points),
-          child: MouseClickCoordinatesWidget(
-            onClick: (Offset offset) {
+          child: GetGestureMouse(
+            points: widget.points,
+            rodou_alg: rodou_alg,
+            mode_text: widget.mode_text,
+            attPoints: (pontos_att) {
               setState(() {
-                widget.points.add(offset);
-                print(offset);
+                widget.updatePoints(pontos_att);
               });
             },
-            width: widget.width,
-            height: widget.height,
+            updateRodouAlg: (details) {
+              setState(() {
+                rodou_alg = details;
+              });
+            },
           ),
         ),
       ),
@@ -105,8 +138,7 @@ class Canva extends CustomPainter {
         Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
 
     points.forEach((point) {
-      canvas.drawPoints(PointMode.points,
-          [Offset(point.dx.roundToDouble(), point.dy.roundToDouble())], paint);
+      canvas.drawPoints(PointMode.points, [point], paint);
     });
   }
 
