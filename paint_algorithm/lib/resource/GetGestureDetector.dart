@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // meus imports
 import '../algorithms/dda.dart';
+import '../algorithms/bresenham.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -31,25 +32,29 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
     return GestureDetector(
       onPanStart: (details) {
         setState(() {
-          if (!points_unico.contains(Offset(
-              details.localPosition.dx.roundToDouble(),
-              details.localPosition.dy.roundToDouble()))) {
-            points_unico.clear();
-            points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()));
-            widget.attPoints(points_unico);
+          if (widget.mode_text == "Painter") {
+            if (!points_unico.contains(Offset(
+                details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+              points_unico.clear();
+              points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              widget.attPoints(points_unico);
+            }
           }
         });
       },
       onPanUpdate: (details) {
         setState(() {
-          if (!points_unico.contains(Offset(
-              details.localPosition.dx.roundToDouble(),
-              details.localPosition.dy.roundToDouble()))) {
-            points_unico.clear();
-            points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()));
-            widget.attPoints(points_unico);
+          if (widget.mode_text == "Painter") {
+            if (!points_unico.contains(Offset(
+                details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+              points_unico.clear();
+              points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              widget.attPoints(points_unico);
+            }
           }
         });
       },
@@ -62,7 +67,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               details.localPosition.dy.roundToDouble()));
           widget.attPoints(points_unico);
 
-          checkDDA(widget.mode_text, widget.points, widget.attPoints,
+          checkDDAorBresenham(widget.mode_text, widget.points, widget.attPoints,
               widget.updateRodouAlg, points_unico, widget.rodou_alg);
         }
       },
@@ -74,17 +79,23 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
 // Funcoes de Check
 // #################
 
-void checkDDA(
+void checkDDAorBresenham(
     String mode_text,
     List<Offset> points,
     Function(List<Offset>) attPoints,
     Function(bool) updateRodouAlg,
     List<Offset> points_unico,
     bool rodou_alg) {
-  if (mode_text == "DDA" && points.length > 1 && !rodou_alg) {
+  if ((mode_text == "DDA" || mode_text == "Bresenham-Reta") &&
+      points.length > 1 &&
+      !rodou_alg) {
     points_unico.clear();
     if (points.length == 2) {
-      points_unico = List<Offset>.from(paintDDA(points));
+      if (mode_text == "DDA") {
+        points_unico = List<Offset>.from(paintDDA(points));
+      } else if (mode_text == "Bresenham-Reta") {
+        points_unico = List<Offset>.from(paintBresenhamGeneric(points));
+      }
       points.clear();
       attPoints(points_unico);
       updateRodouAlg(true);
@@ -93,7 +104,11 @@ void checkDDA(
       ultimosElementos.addAll(points.sublist(points.length - 2));
       points.removeRange(points.length - 2, points.length);
 
-      ultimosElementos = paintDDA(ultimosElementos);
+      if (mode_text == "DDA") {
+        ultimosElementos = paintDDA(ultimosElementos);
+      } else if (mode_text == "Bresenham-Reta") {
+        ultimosElementos = paintBresenhamGeneric(ultimosElementos);
+      }
       attPoints(ultimosElementos);
       updateRodouAlg(true);
     }
