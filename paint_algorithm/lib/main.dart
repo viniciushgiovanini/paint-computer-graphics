@@ -68,7 +68,6 @@ class MyHomePage extends State<Home> {
               updateStringMode: (details) {
                 setState(() {
                   mode_text = details;
-                  print("MODEL TEXT = $details");
                 });
               },
             ),

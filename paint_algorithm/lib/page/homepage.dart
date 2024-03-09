@@ -53,7 +53,6 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           updateMode: (txt_mode) {
             setState(() {
               widget.updateStringMode(txt_mode);
-              print("TXTMODE NO HOMEPAGE: $txt_mode");
             });
           },
         ),
