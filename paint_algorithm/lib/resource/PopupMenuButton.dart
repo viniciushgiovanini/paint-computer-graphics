@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 Widget getPopUpMenuButtom(
   List<PopupMenuItem<String>> listadePopUp,
   void Function(String) updateMode,
+  IconData icon_name,
 ) {
   List<PopupMenuEntry<String>> items = [];
 
@@ -18,13 +19,17 @@ Widget getPopUpMenuButtom(
 
   return PopupMenuButton<String>(
       icon: Icon(
-        Icons.straight,
+        icon_name,
       ),
       iconSize: 35.0,
       itemBuilder: (BuildContext context) => items,
       onSelected: (String value) {
         if (value == "DDA") {
           updateMode("DDA");
+        } else if (value == "Bresenham") {
+          updateMode("Bresenham-Reta");
+        } else if (value == "Bresenham-Circ") {
+          updateMode("Bresenham-Circ");
         }
       });
 }

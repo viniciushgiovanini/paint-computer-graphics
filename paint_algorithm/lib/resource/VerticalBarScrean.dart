@@ -39,6 +39,15 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
               PopupMenuItem(value: "Bresenham", child: Text("Bresenham"))
             ],
             widget.updateMode,
+            Icons.straight,
+          ),
+          getPopUpMenuButtom(
+            [
+              PopupMenuItem(
+                  value: "Bresenham-Circ", child: Text("Bresenham-Circ"))
+            ],
+            widget.updateMode,
+            Icons.circle,
           )
         ],
       ),
