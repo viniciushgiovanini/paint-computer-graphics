@@ -44,6 +44,11 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
             minScale: 0.1,
             maxScale: 60.0,
             child: CanvaWidget(
+              attListaObject: (p0) {
+                setState(() {
+                  lista_objetos = p0;
+                });
+              },
               updatePixelId: (p0) {
                 setState(() {
                   pixel_id = p0;
@@ -55,9 +60,6 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               height: height,
               mode_text: widget.mode_text,
               updatePoints: (updatedPoints) {
-                // Points newObject = new Points();
-                // newObject.setOffset(updatedPoints);
-                // newObject.setPixelId(pixel_id);
                 points_class.addAll(updatedPoints);
               },
               lista_objetos: lista_objetos,
@@ -85,6 +87,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
 // ignore: must_be_immutable
 class CanvaWidget extends StatefulWidget {
   final List<Points> points_class;
+  final Function(List<Object>) attListaObject;
   final double width;
   final double height;
   final Function(List<Points>) updatePoints;
@@ -96,6 +99,7 @@ class CanvaWidget extends StatefulWidget {
 
   CanvaWidget({
     super.key,
+    required this.attListaObject,
     required this.lista_objetos,
     required this.pixel_id,
     required this.updatePixelId,
@@ -122,10 +126,13 @@ class _CanvaWidgetState extends State<CanvaWidget> {
           size: Size(widget.width, widget.height),
           painter: Canva(widget.points_class),
           child: GetGestureMouse(
+            attListaObject: (p0) {
+              widget.attListaObject(p0);
+              "".toString();
+            },
             points_class: widget.points_class,
             updatePixelID_gesture_detector: (p0) {
               widget.updatePixelId(p0);
-              "".toString();
             },
             pixel_id: widget.pixel_id,
             mode_text: widget.mode_text,

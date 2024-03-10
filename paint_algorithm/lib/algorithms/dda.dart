@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../class/Points.dart';
 import '../class/Object.dart';
 
 Object paintDDA(Object objeto_inicial, Object objeto_final) {
@@ -41,5 +40,10 @@ Object paintDDA(Object objeto_inicial, Object objeto_final) {
     objeto_resultdo_do_dda.appendNovoPonto(
         Offset(x.roundToDouble(), y.roundToDouble()), id_objeto_resultado_dda);
   }
+
+  // Adicionando o ultimo ponto
+  objeto_resultdo_do_dda.appendNovoPonto(
+      objeto_final.lista_de_pontos[0].ponto, id_objeto_resultado_dda);
+
   return objeto_resultdo_do_dda;
 }

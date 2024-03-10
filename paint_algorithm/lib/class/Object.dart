@@ -27,6 +27,7 @@ class Object {
     novo_points.setPixelId(id);
 
     this.lista_de_pontos.add(novo_points);
+    this.lastId = id;
   }
 
   List<Points> objectListtoPointsList(List<Object> lista_de_objeto) {
