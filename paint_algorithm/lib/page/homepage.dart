@@ -7,7 +7,8 @@ import "../resource/VerticalBarScrean.dart";
 import '../resource/GetGestureDetector.dart';
 
 // Classe
-import '../class/DrawingObject.dart';
+import '../class/Points.dart';
+import '../class/Object.dart';
 
 // ###########################
 // Classe do ViewerInteractive
@@ -25,11 +26,11 @@ class ViewerInteractive extends StatefulWidget {
 }
 
 class _ViewerInteractiveState extends State<ViewerInteractive> {
-  List<DrawingObject> drawing_object = [];
+  List<Points> points_class = [];
   final double width = 300;
   final double height = 300.5;
   int pixel_id = 0;
-
+  List<Object> lista_objetos = [];
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -44,27 +45,31 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
             maxScale: 60.0,
             child: CanvaWidget(
               updatePixelId: (p0) {
-                pixel_id = p0;
+                setState(() {
+                  pixel_id = p0;
+                });
               },
               pixel_id: pixel_id,
-              drawing_object: drawing_object,
+              points_class: points_class,
               width: width,
               height: height,
               mode_text: widget.mode_text,
               updatePoints: (updatedPoints) {
-                DrawingObject newObject = new DrawingObject();
-                newObject.setOffset(updatedPoints);
-                newObject.setPixelId(pixel_id);
-                drawing_object.add(newObject);
-                "".toString();
+                // Points newObject = new Points();
+                // newObject.setOffset(updatedPoints);
+                // newObject.setPixelId(pixel_id);
+                points_class.addAll(updatedPoints);
               },
+              lista_objetos: lista_objetos,
             ),
           ),
         )),
         VerticalBarScreen(
-          drawing_object: drawing_object,
+          points_class: points_class,
           updatePixelId: (p0) {
-            pixel_id = p0;
+            setState(() {
+              pixel_id = p0;
+            });
           },
           updateMode: (txt_mode) {
             setState(() {
@@ -79,20 +84,22 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
 
 // ignore: must_be_immutable
 class CanvaWidget extends StatefulWidget {
-  final List<DrawingObject> drawing_object;
+  final List<Points> points_class;
   final double width;
   final double height;
-  final Function(Offset) updatePoints;
+  final Function(List<Points>) updatePoints;
   final Function(int) updatePixelId;
   final int pixel_id;
+  final List<Object> lista_objetos;
 
   final String mode_text;
 
   CanvaWidget({
     super.key,
+    required this.lista_objetos,
     required this.pixel_id,
     required this.updatePixelId,
-    required this.drawing_object,
+    required this.points_class,
     required this.width,
     required this.height,
     required this.updatePoints,
@@ -107,33 +114,27 @@ class CanvaWidget extends StatefulWidget {
 // Classe do Canva
 // #####################
 class _CanvaWidgetState extends State<CanvaWidget> {
-  bool rodou_alg = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         child: CustomPaint(
           size: Size(widget.width, widget.height),
-          painter: Canva(widget.drawing_object),
+          painter: Canva(widget.points_class),
           child: GetGestureMouse(
-            drawing_object: widget.drawing_object,
+            points_class: widget.points_class,
             updatePixelID_gesture_detector: (p0) {
               widget.updatePixelId(p0);
               "".toString();
             },
             pixel_id: widget.pixel_id,
-            rodou_alg: rodou_alg,
             mode_text: widget.mode_text,
             attPoints: (pontos_att) {
               setState(() {
                 widget.updatePoints(pontos_att);
               });
             },
-            updateRodouAlg: (details) {
-              setState(() {
-                rodou_alg = details;
-              });
-            },
+            lista_objetos: widget.lista_objetos,
           ),
         ),
       ),
@@ -146,9 +147,9 @@ class _CanvaWidgetState extends State<CanvaWidget> {
 // #####################
 
 class Canva extends CustomPainter {
-  List<DrawingObject> drawing_object = [];
+  List<Points> points_class = [];
 
-  Canva(this.drawing_object);
+  Canva(this.points_class);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -161,7 +162,7 @@ class Canva extends CustomPainter {
     canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
 
-    drawing_object.forEach((point) {
+    points_class.forEach((point) {
       canvas.drawPoints(PointMode.points, [point.ponto], paint);
     });
   }

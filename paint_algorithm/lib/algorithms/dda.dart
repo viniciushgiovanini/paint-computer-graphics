@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import '../class/Points.dart';
+import '../class/Object.dart';
 
-List<Offset> paintDDA(List<Offset> points) {
-  double x1 = points[0].dx.roundToDouble();
-  double y1 = points[0].dy.roundToDouble();
-  double x2 = points[1].dx.roundToDouble();
-  double y2 = points[1].dy.roundToDouble();
+Object paintDDA(Object objeto_inicial, Object objeto_final) {
+  Object objeto_resultdo_do_dda = new Object();
+  int id_objeto_resultado_dda = objeto_inicial.lastId;
+
+  double x1 = objeto_inicial.lista_de_pontos[0].ponto.dx.roundToDouble();
+  double y1 = objeto_inicial.lista_de_pontos[0].ponto.dy.roundToDouble();
+  double x2 = objeto_final.lista_de_pontos[0].ponto.dx.roundToDouble();
+  double y2 = objeto_final.lista_de_pontos[0].ponto.dy.roundToDouble();
   double x_incre, y_incre, x, y;
 
   double dx = x2 - x1;
@@ -26,13 +31,15 @@ List<Offset> paintDDA(List<Offset> points) {
   y = y1;
 
   // set_pixe(round(x), round(y))
-  points.insert(1, Offset(x.roundToDouble(), y.roundToDouble()));
+  objeto_resultdo_do_dda.appendNovoPonto(
+      Offset(x.roundToDouble(), y.roundToDouble()), id_objeto_resultado_dda);
 
   for (var k = 1; k < passos; k++) {
     x = x + x_incre;
     y = y + y_incre;
     // set_pixe(round(x), round(y))
-    points.insert(k + 1, Offset(x.roundToDouble(), y.roundToDouble()));
+    objeto_resultdo_do_dda.appendNovoPonto(
+        Offset(x.roundToDouble(), y.roundToDouble()), id_objeto_resultado_dda);
   }
-  return points;
+  return objeto_resultdo_do_dda;
 }

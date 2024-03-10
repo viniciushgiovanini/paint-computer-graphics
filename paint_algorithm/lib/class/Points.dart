@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DrawingObject {
+class Points {
   Offset ponto = Offset(0.0, 0.0);
   int id_pixel = 0;
 
@@ -22,8 +22,8 @@ class DrawingObject {
     this.id_pixel = pixel_id;
   }
 
-  bool isList(List<DrawingObject> drawing_object, Offset value) {
-    for (var element in drawing_object) {
+  bool isList(List<Points> points_class, Offset value) {
+    for (var element in points_class) {
       if (element.ponto == value) {
         return true;
       }
