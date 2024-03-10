@@ -26,7 +26,7 @@ Widget getPopUpMenuButtom(
       onSelected: (String value) {
         if (value == "DDA") {
           updateMode("DDA");
-        } else if (value == "Bresenham") {
+        } else if (value == "Bresenham-Reta") {
           updateMode("Bresenham-Reta");
         } else if (value == "Bresenham-Circ") {
           updateMode("Bresenham-Circ");

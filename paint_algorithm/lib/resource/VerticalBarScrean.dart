@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:paint_algorithm/class/Points.dart';
 
 // Imports meus
 import 'GetIcon.dart';
 import "PopupMenuButton.dart";
 
 class VerticalBarScreen extends StatefulWidget {
-  final List<Offset> points;
+  final List<Points> points_class;
   final Function(String) updateMode;
+  final Function(int) updatePixelId;
 
   VerticalBarScreen(
-      {super.key, required this.points, required this.updateMode});
+      {super.key,
+      required this.points_class,
+      required this.updateMode,
+      required this.updatePixelId});
 
   @override
   State<VerticalBarScreen> createState() => _VerticalBarScreenState();
@@ -28,7 +33,8 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           getIcon(Icons.delete, 35.0, () {
-            widget.points.clear();
+            widget.points_class.clear();
+            widget.updatePixelId(0);
           }),
           getIcon(Icons.brush, 35.0, () {
             widget.updateMode("Painter");
@@ -36,7 +42,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getPopUpMenuButtom(
             [
               PopupMenuItem(value: "DDA", child: Text("DDA")),
-              PopupMenuItem(value: "Bresenham", child: Text("Bresenham"))
+              PopupMenuItem(value: "Bresenham-Reta", child: Text("Bresenham"))
             ],
             widget.updateMode,
             Icons.straight,
