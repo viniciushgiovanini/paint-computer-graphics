@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_algorithm/class/DrawingObject.dart';
 
 // meus imports
 import '../algorithms/dda.dart';
@@ -6,26 +7,31 @@ import '../algorithms/bresenham.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
-  final List<Offset> points;
-  final Function(List<Offset>) attPoints;
+  final Function(Offset) attPoints;
   final String mode_text;
   final Function(bool) updateRodouAlg;
+  final Function(int) updatePixelID_gesture_detector;
+  final List<DrawingObject> drawing_object;
+  int pixel_id;
   bool rodou_alg;
 
-  GetGestureMouse(
-      {super.key,
-      required this.attPoints,
-      required this.mode_text,
-      required this.points,
-      required this.rodou_alg,
-      required this.updateRodouAlg});
+  GetGestureMouse({
+    super.key,
+    required this.drawing_object,
+    required this.updatePixelID_gesture_detector,
+    required this.pixel_id,
+    required this.attPoints,
+    required this.mode_text,
+    required this.rodou_alg,
+    required this.updateRodouAlg,
+  });
 
   @override
   State<GetGestureMouse> createState() => _GetGestureMouseState();
 }
 
 class _GetGestureMouseState extends State<GetGestureMouse> {
-  List<Offset> points_unico = [];
+  Offset points_unico = Offset(0.0, 0.0);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +39,12 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
       onPanStart: (details) {
         setState(() {
           if (widget.mode_text == "Painter") {
-            if (!points_unico.contains(Offset(
-                details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
-              points_unico.clear();
-              points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+            DrawingObject newObject = new DrawingObject();
+            if (!newObject.isList(
+                widget.drawing_object,
+                Offset(details.localPosition.dx.roundToDouble(),
+                    details.localPosition.dy.roundToDouble()))) {
+              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                   details.localPosition.dy.roundToDouble()));
               widget.attPoints(points_unico);
             }
@@ -47,11 +54,12 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
       onPanUpdate: (details) {
         setState(() {
           if (widget.mode_text == "Painter") {
-            if (!points_unico.contains(Offset(
-                details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
-              points_unico.clear();
-              points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+            DrawingObject newObject = new DrawingObject();
+            if (!newObject.isList(
+                widget.drawing_object,
+                Offset(details.localPosition.dx.roundToDouble(),
+                    details.localPosition.dy.roundToDouble()))) {
+              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                   details.localPosition.dy.roundToDouble()));
               widget.attPoints(points_unico);
             }
@@ -59,17 +67,26 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         });
       },
       onTapDown: (details) {
-        if (!points_unico.contains(Offset(
-            details.localPosition.dx.roundToDouble(),
-            details.localPosition.dy.roundToDouble()))) {
-          points_unico.clear();
-          points_unico.add(Offset(details.localPosition.dx.roundToDouble(),
+        DrawingObject newObject = new DrawingObject();
+        if (!newObject.isList(
+            widget.drawing_object,
+            Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+          points_unico = (Offset(details.localPosition.dx.roundToDouble(),
               details.localPosition.dy.roundToDouble()));
           widget.attPoints(points_unico);
 
-          checkDDAorBresenham(widget.mode_text, widget.points, widget.attPoints,
-              widget.updateRodouAlg, points_unico, widget.rodou_alg);
+          // checkDDAorBresenham(widget.mode_text, widget.points, widget.attPoints,
+          //     widget.updateRodouAlg, points_unico, widget.rodou_alg);
         }
+      },
+      onPanEnd: (details) {
+        int newID = ++widget.pixel_id;
+        widget.updatePixelID_gesture_detector(newID);
+      },
+      onTapUp: (details) {
+        int newID = ++widget.pixel_id;
+        widget.updatePixelID_gesture_detector(newID);
       },
     );
   }
