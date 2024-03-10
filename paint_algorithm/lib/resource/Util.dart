@@ -46,30 +46,3 @@ class Util {
     return lista_de_objetos;
   }
 }
-
-
-
-  // List<Object> createListObject(List<Points> points_lista) {
-  //   List<Object> lista_de_objetos = [];
-  //   List<Points> lista_de_points = [];
-  //   Points newObject = new Points();
-
-  //   for (var i = 0; i < points_lista.length; i++) {
-  //     var current_element = points_lista[i];
-  //     var next_element = points_lista[i + 1];
-
-  //     if (current_element.id_pixel == next_element.id_pixel) {
-  //       newObject = new Points();
-  //       newObject.ponto = current_element.ponto;
-  //       newObject.id_pixel = current_element.id_pixel;
-  //       lista_de_points.add(newObject);
-  //     } else {
-        
-
-  //       newObject = new Points();
-  //       newObject.ponto = next_element.ponto;
-  //       newObject.id_pixel = next_element.id_pixel;
-  //       lista_de_points.add(newObject);
-  //     }
-  //   }
-  // }

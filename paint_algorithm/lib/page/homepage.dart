@@ -128,7 +128,6 @@ class _CanvaWidgetState extends State<CanvaWidget> {
           child: GetGestureMouse(
             attListaObject: (p0) {
               widget.attListaObject(p0);
-              "".toString();
             },
             points_class: widget.points_class,
             updatePixelID_gesture_detector: (p0) {

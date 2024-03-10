@@ -43,16 +43,12 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         setState(() {
           if (widget.mode_text == "Painter") {
             Points newObject = new Points();
-            if (!newObject.isList(
-                widget.points_class,
-                Offset(details.localPosition.dx.roundToDouble(),
-                    details.localPosition.dy.roundToDouble()))) {
-              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-                  details.localPosition.dy.roundToDouble()));
-              newObject.setOffset(points_unico);
-              newObject.setPixelId(widget.pixel_id);
-              widget.attPoints([newObject]);
-            }
+
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            newObject.setOffset(points_unico);
+            newObject.setPixelId(widget.pixel_id);
+            widget.attPoints([newObject]);
           }
         });
       },
@@ -60,43 +56,34 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         setState(() {
           if (widget.mode_text == "Painter") {
             Points newObject = new Points();
-            if (!newObject.isList(
-                widget.points_class,
-                Offset(details.localPosition.dx.roundToDouble(),
-                    details.localPosition.dy.roundToDouble()))) {
-              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-                  details.localPosition.dy.roundToDouble()));
-              newObject.setOffset(points_unico);
-              newObject.setPixelId(widget.pixel_id);
-              widget.attPoints([newObject]);
-            }
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            newObject.setOffset(points_unico);
+            newObject.setPixelId(widget.pixel_id);
+            widget.attPoints([newObject]);
           }
         });
       },
       onTapDown: (details) {
         Points newObject = new Points();
-        if (!newObject.isList(
-            widget.points_class,
-            Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
-          points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-              details.localPosition.dy.roundToDouble()));
-          newObject.setOffset(points_unico);
-          newObject.setPixelId(widget.pixel_id);
-          widget.attPoints([newObject]);
 
-          // TEM QUE MELHORAR A LOGICA DESSE IF AQUI <----------------------------------------------------------------------------------------------
+        points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+            details.localPosition.dy.roundToDouble()));
+        newObject.setOffset(points_unico);
+        newObject.setPixelId(widget.pixel_id);
+        widget.attPoints([newObject]);
 
-          checkDDAorBresenham(
-            widget.mode_text,
-            save_pontos_att,
-            points_unico,
-            widget.points_class,
-            widget.attPoints,
-            widget.lista_objetos,
-            widget.attListaObject,
-          );
-        }
+        // TEM QUE MELHORAR A LOGICA DESSE IF AQUI <----------------------------------------------------------------------------------------------
+
+        checkDDAorBresenham(
+          widget.mode_text,
+          save_pontos_att,
+          points_unico,
+          widget.points_class,
+          widget.attPoints,
+          widget.lista_objetos,
+          widget.attListaObject,
+        );
       },
       onPanEnd: (details) {
         int newID = ++widget.pixel_id;
@@ -152,7 +139,6 @@ void checkDDAorBresenham(
 
           attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
           attListaObject(lista_objetos);
-          "".toString();
         }
       }
       save_pontos_att.clear();
