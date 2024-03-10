@@ -6,7 +6,6 @@ import '../algorithms/dda.dart';
 import '../algorithms/bresenham.dart';
 import 'Util.dart';
 import "../class/Object.dart";
-import "../class/Points.dart";
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -83,7 +82,6 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         newObject.setPixelId(widget.pixel_id);
         widget.attPoints([newObject]);
 
-        // TEM QUE MELHORAR A LOGICA DESSE IF AQUI <----------------------------------------------------------------------------------------------
         if (widget.mode_text == "DDA") {
           paintLine(
             widget.mode_text,
