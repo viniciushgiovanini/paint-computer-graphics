@@ -44,9 +44,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
             maxScale: 60.0,
             child: CanvaWidget(
               updatePixelId: (p0) {
-                setState(() {
-                  pixel_id = p0;
-                });
+                pixel_id = p0;
               },
               pixel_id: pixel_id,
               drawing_object: drawing_object,
@@ -58,12 +56,16 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
                 newObject.setOffset(updatedPoints);
                 newObject.setPixelId(pixel_id);
                 drawing_object.add(newObject);
+                "".toString();
               },
             ),
           ),
         )),
         VerticalBarScreen(
           drawing_object: drawing_object,
+          updatePixelId: (p0) {
+            pixel_id = p0;
+          },
           updateMode: (txt_mode) {
             setState(() {
               widget.updateStringMode(txt_mode);

@@ -8,9 +8,13 @@ import "PopupMenuButton.dart";
 class VerticalBarScreen extends StatefulWidget {
   final List<DrawingObject> drawing_object;
   final Function(String) updateMode;
+  final Function(int) updatePixelId;
 
   VerticalBarScreen(
-      {super.key, required this.drawing_object, required this.updateMode});
+      {super.key,
+      required this.drawing_object,
+      required this.updateMode,
+      required this.updatePixelId});
 
   @override
   State<VerticalBarScreen> createState() => _VerticalBarScreenState();
@@ -29,9 +33,8 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           getIcon(Icons.delete, 35.0, () {
-            widget.drawing_object.forEach((object) {
-              // object.lista_pontos.clear();
-            });
+            widget.drawing_object.clear();
+            widget.updatePixelId(0);
           }),
           getIcon(Icons.brush, 35.0, () {
             widget.updateMode("Painter");
