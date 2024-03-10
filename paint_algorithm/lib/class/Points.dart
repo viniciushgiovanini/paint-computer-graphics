@@ -26,4 +26,14 @@ class Points {
   bool isSoloPixel(List<Points> lista_de_points) {
     return lista_de_points.length == 1 ? true : false;
   }
+
+// verifica se o offset existe na lista de Points
+  bool isList(List<Points> points_class, Offset value) {
+    for (var element in points_class) {
+      if (element.ponto == value) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

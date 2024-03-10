@@ -6,6 +6,7 @@ import '../algorithms/dda.dart';
 import '../algorithms/bresenham.dart';
 import 'Util.dart';
 import "../class/Object.dart";
+import "../class/Points.dart";
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -40,29 +41,38 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanStart: (details) {
-        setState(() {
-          if (widget.mode_text == "Painter") {
-            Points newObject = new Points();
-
-            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()));
-            newObject.setOffset(points_unico);
-            newObject.setPixelId(widget.pixel_id);
-            widget.attPoints([newObject]);
-          }
-        });
+        Points newObject = new Points();
+        if (!newObject.isList(
+            widget.points_class,
+            Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+          setState(() {
+            if (widget.mode_text == "Painter") {
+              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              newObject.setOffset(points_unico);
+              newObject.setPixelId(widget.pixel_id);
+              widget.attPoints([newObject]);
+            }
+          });
+        }
       },
       onPanUpdate: (details) {
-        setState(() {
-          if (widget.mode_text == "Painter") {
-            Points newObject = new Points();
-            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()));
-            newObject.setOffset(points_unico);
-            newObject.setPixelId(widget.pixel_id);
-            widget.attPoints([newObject]);
-          }
-        });
+        Points newObject = new Points();
+        if (!newObject.isList(
+            widget.points_class,
+            Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()))) {
+          setState(() {
+            if (widget.mode_text == "Painter") {
+              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              newObject.setOffset(points_unico);
+              newObject.setPixelId(widget.pixel_id);
+              widget.attPoints([newObject]);
+            }
+          });
+        }
       },
       onTapDown: (details) {
         Points newObject = new Points();
@@ -74,16 +84,29 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         widget.attPoints([newObject]);
 
         // TEM QUE MELHORAR A LOGICA DESSE IF AQUI <----------------------------------------------------------------------------------------------
-
-        checkDDAorBresenham(
-          widget.mode_text,
-          save_pontos_att,
-          points_unico,
-          widget.points_class,
-          widget.attPoints,
-          widget.lista_objetos,
-          widget.attListaObject,
-        );
+        if (widget.mode_text == "DDA") {
+          paintLine(
+            widget.mode_text,
+            save_pontos_att,
+            points_unico,
+            widget.points_class,
+            widget.attPoints,
+            widget.lista_objetos,
+            widget.attListaObject,
+            paintDDA,
+          );
+        } else if (widget.mode_text == "Bresenham-Reta") {
+          paintLine(
+            widget.mode_text,
+            save_pontos_att,
+            points_unico,
+            widget.points_class,
+            widget.attPoints,
+            widget.lista_objetos,
+            widget.attListaObject,
+            paintBresenhamGeneric,
+          );
+        }
       },
       onPanEnd: (details) {
         int newID = ++widget.pixel_id;
@@ -101,7 +124,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
 // Funcoes de Check
 // #################
 
-void checkDDAorBresenham(
+void paintLine(
   String mode_text,
   List<Offset> save_pontos_att,
   Offset points_unico,
@@ -109,6 +132,7 @@ void checkDDAorBresenham(
   Function(List<Points>) attPoints,
   List<Object> lista_objetos,
   Function(List<Object>) attListaObject,
+  Function painterAlg,
 ) {
   // Lista para verificar se são pontos distintos, para não partir da ultima reta desenhada
   if ((mode_text == "DDA" || mode_text == "Bresenham-Reta")) {
@@ -121,7 +145,7 @@ void checkDDAorBresenham(
         lista_objetos = obj.createListObject(points_class);
       }
 
-      if (mode_text == "DDA" && lista_objetos.length != 0) {
+      if (lista_objetos.length != 0) {
         Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
         Object objeto_final = lista_objetos[lista_objetos.length - 1];
 
@@ -133,7 +157,7 @@ void checkDDAorBresenham(
           lista_objetos.remove(objeto_inicial);
           lista_objetos.remove(objeto_final);
 
-          lista_objetos.add(paintDDA(objeto_inicial, objeto_final));
+          lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
 
           points_class.clear();
 
