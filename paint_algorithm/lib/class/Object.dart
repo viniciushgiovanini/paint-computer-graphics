@@ -39,4 +39,27 @@ class Object {
     });
     return ret;
   }
+
+  Object mergerTwoObjects(Object one, Object two) {
+    Object new_object = new Object();
+    new_object.setLastId(one.lastId);
+    new_object.setListaPonto(one.lista_de_pontos);
+
+    two.lista_de_pontos.forEach((element) {
+      element.id_pixel = one.lastId;
+      new_object.lista_de_pontos.add(element);
+    });
+
+    return new_object;
+  }
+
+  List<Offset> mergeAllPointstoListOffset(Object one) {
+    List<Offset> resp = [];
+
+    one.lista_de_pontos.forEach((each_points) {
+      resp.add(each_points.ponto);
+    });
+
+    return resp;
+  }
 }

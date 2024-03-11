@@ -74,6 +74,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           ),
         )),
         VerticalBarScreen(
+          lista_objetos: lista_objetos,
           updateModeAlgoritmo: (p0) {
             widget.updateModeAlgoritmo(p0);
           },
