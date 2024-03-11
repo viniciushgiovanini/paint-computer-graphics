@@ -8,12 +8,14 @@ import 'GetDialog.dart';
 
 class VerticalBarScreen extends StatefulWidget {
   final List<Points> points_class;
+  final List<Object> lista_objetos;
   final Function(String) updateMode;
   final Function(int) updatePixelId;
   final Function(String) updateModeAlgoritmo;
 
   VerticalBarScreen(
       {super.key,
+      required this.lista_objetos,
       required this.points_class,
       required this.updateMode,
       required this.updatePixelId,
@@ -47,12 +49,16 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.straight, 35.0, () {
             widget.updateMode("Reta");
           }),
-          getIcon(Icons.circle, 35.0, () {
+          getIcon(Icons.hexagon_outlined, 35.0, () {
+            widget.updateMode("Poligono");
+          }),
+          getIcon(Icons.circle_outlined, 35.0, () {
             // widget.updateMode("Reta");
           }),
           getIcon(Icons.delete, 35.0, () {
             widget.points_class.clear();
             widget.updatePixelId(0);
+            widget.lista_objetos.clear();
           }),
         ],
       ),
