@@ -12,6 +12,7 @@ class GetGestureMouse extends StatefulWidget {
   final Function(List<Points>) attPoints;
   final Function(List<Object>) attListaObject;
   final String mode_text;
+  final String mode_algoritmo;
   final Function(int) updatePixelID_gesture_detector;
   final List<Points> points_class;
   List<Object> lista_objetos;
@@ -26,6 +27,7 @@ class GetGestureMouse extends StatefulWidget {
     required this.pixel_id,
     required this.attPoints,
     required this.mode_text,
+    required this.mode_algoritmo,
   });
 
   @override
@@ -81,29 +83,30 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         newObject.setOffset(points_unico);
         newObject.setPixelId(widget.pixel_id);
         widget.attPoints([newObject]);
-
-        if (widget.mode_text == "DDA") {
-          paintLine(
-            widget.mode_text,
-            save_pontos_att,
-            points_unico,
-            widget.points_class,
-            widget.attPoints,
-            widget.lista_objetos,
-            widget.attListaObject,
-            paintDDA,
-          );
-        } else if (widget.mode_text == "Bresenham-Reta") {
-          paintLine(
-            widget.mode_text,
-            save_pontos_att,
-            points_unico,
-            widget.points_class,
-            widget.attPoints,
-            widget.lista_objetos,
-            widget.attListaObject,
-            paintBresenhamGeneric,
-          );
+        if (widget.mode_text == "Reta") {
+          if (widget.mode_algoritmo == "DDA") {
+            paintLine(
+              widget.mode_algoritmo,
+              save_pontos_att,
+              points_unico,
+              widget.points_class,
+              widget.attPoints,
+              widget.lista_objetos,
+              widget.attListaObject,
+              paintDDA,
+            );
+          } else if (widget.mode_algoritmo == "Bresenham") {
+            paintLine(
+              widget.mode_algoritmo,
+              save_pontos_att,
+              points_unico,
+              widget.points_class,
+              widget.attPoints,
+              widget.lista_objetos,
+              widget.attListaObject,
+              paintBresenhamGeneric,
+            );
+          }
         }
       },
       onPanEnd: (details) {
@@ -123,7 +126,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
 // #################
 
 void paintLine(
-  String mode_text,
+  String mode_algoritmo,
   List<Offset> save_pontos_att,
   Offset points_unico,
   List<Points> points_class,
@@ -133,7 +136,7 @@ void paintLine(
   Function painterAlg,
 ) {
   // Lista para verificar se são pontos distintos, para não partir da ultima reta desenhada
-  if ((mode_text == "DDA" || mode_text == "Bresenham-Reta")) {
+  if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
     save_pontos_att.add(points_unico);
     if (save_pontos_att.length == 2) {
       Util obj = new Util();

@@ -16,10 +16,16 @@ import '../class/Object.dart';
 // ignore: must_be_immutable
 class ViewerInteractive extends StatefulWidget {
   String mode_text;
+  String mode_algoritmo;
   void Function(String) updateStringMode;
+  void Function(String) updateModeAlgoritmo;
 
   ViewerInteractive(
-      {super.key, required this.mode_text, required this.updateStringMode});
+      {super.key,
+      required this.mode_text,
+      required this.mode_algoritmo,
+      required this.updateStringMode,
+      required this.updateModeAlgoritmo});
 
   @override
   State<ViewerInteractive> createState() => _ViewerInteractiveState();
@@ -58,6 +64,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               points_class: points_class,
               width: width,
               height: height,
+              mode_algoritmo: widget.mode_algoritmo,
               mode_text: widget.mode_text,
               updatePoints: (updatedPoints) {
                 points_class.addAll(updatedPoints);
@@ -67,6 +74,9 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           ),
         )),
         VerticalBarScreen(
+          updateModeAlgoritmo: (p0) {
+            widget.updateModeAlgoritmo(p0);
+          },
           points_class: points_class,
           updatePixelId: (p0) {
             setState(() {
@@ -74,9 +84,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
             });
           },
           updateMode: (txt_mode) {
-            setState(() {
-              widget.updateStringMode(txt_mode);
-            });
+            widget.updateStringMode(txt_mode);
           },
         ),
       ],
@@ -94,6 +102,7 @@ class CanvaWidget extends StatefulWidget {
   final Function(int) updatePixelId;
   final int pixel_id;
   final List<Object> lista_objetos;
+  final String mode_algoritmo;
 
   final String mode_text;
 
@@ -108,6 +117,7 @@ class CanvaWidget extends StatefulWidget {
     required this.height,
     required this.updatePoints,
     required this.mode_text,
+    required this.mode_algoritmo,
   });
 
   @override
@@ -135,6 +145,7 @@ class _CanvaWidgetState extends State<CanvaWidget> {
             },
             pixel_id: widget.pixel_id,
             mode_text: widget.mode_text,
+            mode_algoritmo: widget.mode_algoritmo,
             attPoints: (pontos_att) {
               setState(() {
                 widget.updatePoints(pontos_att);
