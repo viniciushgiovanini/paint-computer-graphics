@@ -195,8 +195,6 @@ void paintPolygon(
   Function(List<Object>) attListaObject,
   Function painterAlg,
 ) {
-  // Lista para verificar se são pontos distintos, para não partir da ultima reta desenhada
-
   if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
     if (lista_objetos.length == 0 && save_pontos_att.length != 0) {
       save_pontos_att.clear();
@@ -224,21 +222,17 @@ void paintPolygon(
           new_obj_incial.lista_de_pontos.add(objeto_inicial
               .lista_de_pontos[objeto_inicial.lista_de_pontos.length - 1]);
           print(new_obj_incial);
-          // objeto_inicial = new_obj_incial;
           objeto_inicial.lista_de_pontos.removeLast();
           new_obj_incial = painterAlg(new_obj_incial, objeto_final);
           new_obj_incial =
               new_obj_incial.mergerTwoObjects(objeto_inicial, new_obj_incial);
-          // Tem que fazer um metodo que verifica dentro do objecto dentro da lista de pontos dentro do points os offsets se tem repetido
           List<Offset> lista_verificar_repetido =
               new_obj_incial.mergeAllPointstoListOffset(new_obj_incial);
           if (hasDuplicates(lista_verificar_repetido)) {
             save_pontos_att.clear();
             new_obj_incial.lista_de_pontos.removeLast();
           }
-          // new_obj_incial.mergerTwoObjects(objeto_inicial, new_obj_incial);
           lista_objetos.add(objeto_inicial);
-          "".toString();
         } else {
           lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
         }
@@ -247,7 +241,6 @@ void paintPolygon(
 
         attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
         attListaObject(lista_objetos);
-        "".toString();
       }
     } else {
       Object obj = new Object();
