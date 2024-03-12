@@ -53,7 +53,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
             widget.updateMode("Poligono");
           }),
           getIcon(Icons.circle_outlined, 35.0, () {
-            // widget.updateMode("Reta");
+            widget.updateMode("Circunferencia");
           }),
           getIcon(Icons.delete, 35.0, () {
             widget.points_class.clear();

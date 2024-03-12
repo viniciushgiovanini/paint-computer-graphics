@@ -4,6 +4,7 @@ import 'package:paint_algorithm/class/Points.dart';
 // meus imports
 import '../algorithms/dda.dart';
 import '../algorithms/bresenham.dart';
+import '../algorithms/bresenhamcirc.dart';
 import 'Util.dart';
 import "../class/Object.dart";
 
@@ -84,8 +85,9 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         newObject.setPixelId(widget.pixel_id);
         widget.attPoints([newObject]);
 
-        if (widget.mode_text == "Reta") {
-          if (widget.mode_algoritmo == "DDA") {
+        if (widget.mode_text == "Reta" ||
+            widget.mode_text == "Circunferencia") {
+          if (widget.mode_algoritmo == "DDA" && widget.mode_text == "Reta") {
             paintLine(
               widget.mode_algoritmo,
               save_pontos_att,
@@ -96,7 +98,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               widget.attListaObject,
               paintDDA,
             );
-          } else if (widget.mode_algoritmo == "Bresenham") {
+          } else if (widget.mode_algoritmo == "Bresenham" &&
+              widget.mode_text == "Reta") {
             paintLine(
               widget.mode_algoritmo,
               save_pontos_att,
@@ -106,6 +109,17 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               widget.lista_objetos,
               widget.attListaObject,
               paintBresenhamGeneric,
+            );
+          } else if (widget.mode_text == "Circunferencia") {
+            paintLine(
+              widget.mode_algoritmo,
+              save_pontos_att,
+              points_unico,
+              widget.points_class,
+              widget.attPoints,
+              widget.lista_objetos,
+              widget.attListaObject,
+              paintCirc,
             );
           }
         } else if (widget.mode_text == "Poligono") {
@@ -161,40 +175,40 @@ void paintLine(
   Function painterAlg,
 ) {
   // Lista para verificar se são pontos distintos, para não partir da ultima reta desenhada
-  if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
-    save_pontos_att.add(points_unico);
-    if (save_pontos_att.length == 2) {
-      Util obj = new Util();
-      if (lista_objetos.length != 0) {
-        lista_objetos = obj.createListObject(points_class);
-      } else {
-        lista_objetos = obj.createListObject(points_class);
-      }
-
-      if (lista_objetos.length != 0) {
-        Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
-        Object objeto_final = lista_objetos[lista_objetos.length - 1];
-
-        // conficao de erro para voce não usar por exemplo dda --> paint --> dda se vc ficar alternando o modo buga a lista de objeto
-        Points new_instance = new Points();
-
-        if (new_instance.isSoloPixel(objeto_inicial.lista_de_pontos) &&
-            new_instance.isSoloPixel(objeto_final.lista_de_pontos)) {
-          lista_objetos.remove(objeto_inicial);
-          lista_objetos.remove(objeto_final);
-
-          lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
-
-          points_class.clear();
-
-          attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
-          attListaObject(lista_objetos);
-        }
-      }
-      save_pontos_att.clear();
+  // if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
+  save_pontos_att.add(points_unico);
+  if (save_pontos_att.length == 2) {
+    Util obj = new Util();
+    if (lista_objetos.length != 0) {
+      lista_objetos = obj.createListObject(points_class);
+    } else {
+      lista_objetos = obj.createListObject(points_class);
     }
+
+    if (lista_objetos.length != 0) {
+      Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
+      Object objeto_final = lista_objetos[lista_objetos.length - 1];
+
+      // conficao de erro para voce não usar por exemplo dda --> paint --> dda se vc ficar alternando o modo buga a lista de objeto
+      Points new_instance = new Points();
+
+      if (new_instance.isSoloPixel(objeto_inicial.lista_de_pontos) &&
+          new_instance.isSoloPixel(objeto_final.lista_de_pontos)) {
+        lista_objetos.remove(objeto_inicial);
+        lista_objetos.remove(objeto_final);
+
+        lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
+
+        points_class.clear();
+
+        attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
+        attListaObject(lista_objetos);
+      }
+    }
+    save_pontos_att.clear();
   }
 }
+// }
 
 void paintPolygon(
   String mode_algoritmo,
