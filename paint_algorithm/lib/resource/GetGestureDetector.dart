@@ -120,7 +120,18 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               widget.attListaObject,
               paintDDA,
             );
-          } else if (widget.mode_algoritmo == "Bresenham") {}
+          } else if (widget.mode_algoritmo == "Bresenham") {
+            paintPolygon(
+              widget.mode_algoritmo,
+              save_pontos_att,
+              points_unico,
+              widget.points_class,
+              widget.attPoints,
+              widget.lista_objetos,
+              widget.attListaObject,
+              paintBresenhamGeneric,
+            );
+          }
         }
       },
       onPanEnd: (details) {
