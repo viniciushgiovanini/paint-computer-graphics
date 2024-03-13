@@ -225,8 +225,8 @@ void paintLineOrCirc(
   Paint paint,
 ) {
   lista_de_objetos.forEach((element) {
-    if (setTwoPoints(element)) {
-      if (mode_text == "Reta") {
+    if (element.type != "Ponto") {
+      if (element.type == "Reta") {
         if (mode_algoritmo == "DDA") {
           canvas.drawPoints(
               PointMode.points,
@@ -239,7 +239,7 @@ void paintLineOrCirc(
                   element.lista_de_pontos[0], element.lista_de_pontos[1]),
               paint);
         }
-      } else if (mode_text == "Circunferencia") {
+      } else if (element.type == "Circunferencia") {
         canvas.drawPoints(
             PointMode.points,
             paintCirc(element.lista_de_pontos[0], element.lista_de_pontos[1]),

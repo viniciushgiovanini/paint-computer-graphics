@@ -4,6 +4,15 @@ import 'Points.dart';
 class Object {
   List<Points> lista_de_pontos = [];
   int lastId = 0;
+  String type = "Ponto";
+
+  void setType(String type) {
+    this.type = type;
+  }
+
+  String getType() {
+    return this.type;
+  }
 
   void setListaPonto(List<Points> lista_de_pontos) {
     this.lista_de_pontos = lista_de_pontos;

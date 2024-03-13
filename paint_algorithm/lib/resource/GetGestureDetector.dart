@@ -99,6 +99,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             widget.lista_objetos.remove(old_object);
             old_object.setLastId(old_object.getlastId());
             old_object.lista_de_pontos.add(new_point);
+            old_object.setType(widget.mode_text);
             widget.lista_objetos.add(old_object);
 
             // Atualizando PIXEL ID NA RETA
@@ -110,13 +111,13 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         widget.attListaObject(widget.lista_objetos);
       },
       onPanEnd: (details) {
-        // int newID = ++widget.pixel_id;
-        // widget.updatePixelID_gesture_detector(newID);
+        int newID = ++widget.pixel_id;
+        widget.updatePixelID_gesture_detector(newID);
       },
-      onTapUp: (details) {
-        // int newID = ++widget.pixel_id;
-        // widget.updatePixelID_gesture_detector(newID);
-      },
+      // onTapUp: (details) {
+      //   // int newID = ++widget.pixel_id;
+      //   // widget.updatePixelID_gesture_detector(newID);
+      // },
     );
   }
 }
