@@ -14,7 +14,6 @@ import '../class/Object.dart';
 import '../algorithms/dda.dart';
 import '../algorithms/bresenham.dart';
 import '../algorithms/bresenhamcirc.dart';
-import '../resource/Util.dart';
 
 // ###########################
 // Classe do ViewerInteractive
@@ -41,7 +40,6 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
   List<Points> points_class = [];
   final double width = 300;
   final double height = 300.5;
-  int pixel_id = 0;
   List<Object> lista_objetos = [];
   @override
   Widget build(BuildContext context) {
@@ -59,16 +57,8 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               attListaObject: (p0) {
                 setState(() {
                   lista_objetos = p0;
-                  "".toString();
                 });
               },
-              updatePixelId: (p0) {
-                setState(() {
-                  pixel_id = p0;
-                });
-                "".toString();
-              },
-              pixel_id: pixel_id,
               points_class: points_class,
               width: width,
               height: height,
@@ -87,11 +77,6 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
             widget.updateModeAlgoritmo(p0);
           },
           points_class: points_class,
-          updatePixelId: (p0) {
-            setState(() {
-              pixel_id = p0;
-            });
-          },
           updateMode: (txt_mode) {
             widget.updateStringMode(txt_mode);
           },
@@ -108,8 +93,6 @@ class CanvaWidget extends StatefulWidget {
   final double width;
   final double height;
   final Function(List<Points>) updatePoints;
-  final Function(int) updatePixelId;
-  final int pixel_id;
   final List<Object> lista_objetos;
   final String mode_algoritmo;
 
@@ -119,8 +102,6 @@ class CanvaWidget extends StatefulWidget {
     super.key,
     required this.attListaObject,
     required this.lista_objetos,
-    required this.pixel_id,
-    required this.updatePixelId,
     required this.points_class,
     required this.width,
     required this.height,
@@ -156,10 +137,6 @@ class _CanvaWidgetState extends State<CanvaWidget> {
               });
             },
             points_class: widget.points_class,
-            updatePixelID_gesture_detector: (p0) {
-              widget.updatePixelId(p0);
-            },
-            pixel_id: widget.pixel_id,
             mode_text: widget.mode_text,
             mode_algoritmo: widget.mode_algoritmo,
             attPoints: (pontos_att) {
@@ -209,13 +186,7 @@ class Canva extends CustomPainter {
       });
     }
     if (lista_de_objetos.length >= 1) {
-      // if (mode_text == "Reta") {
       paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
-      // }
-      // else if (mode_text == "Poligono") {
-      //   paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint,
-      //       "Poligono");
-      // }
     }
   }
 
@@ -292,13 +263,3 @@ void paintRetas(
     }
   }
 }
-
-
-// else if (mode_algoritmo == "Bresenham") {
-//     canvas.drawPoints(
-//         PointMode.points,
-//         paintBresenhamGeneric(
-//             element.lista_de_pontos[element.lista_de_pontos.length - 2],
-//             element.lista_de_pontos[element.lista_de_pontos.length - 1]),
-//         paint);
-//   }
