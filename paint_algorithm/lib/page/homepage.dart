@@ -78,7 +78,18 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           },
           points_class: points_class,
           updateMode: (txt_mode) {
-            widget.updateStringMode(txt_mode);
+            bool encontrado = false;
+
+            for (var objeto in lista_objetos) {
+              if (objeto.type == "Reta_do_Poligono") {
+                encontrado = true;
+                break;
+              }
+            }
+
+            if (!encontrado) {
+              widget.updateStringMode(txt_mode);
+            }
           },
         ),
       ],
@@ -246,20 +257,18 @@ void paintRetas(
   Object element,
   Function paintFunction,
 ) {
-  if (mode_algoritmo == "DDA") {
-    for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
-      Points elemento_atual = element.lista_de_pontos[i];
-      Points elemento_prox = element.lista_de_pontos[i + 1];
+  for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
+    Points elemento_atual = element.lista_de_pontos[i];
+    Points elemento_prox = element.lista_de_pontos[i + 1];
 
-      canvas.drawPoints(PointMode.points,
-          paintFunction(elemento_atual, elemento_prox), paint);
-    }
-    if (element.type == "Poligono") {
-      Points elemento_atual =
-          element.lista_de_pontos[element.lista_de_pontos.length - 1];
-      Points elemento_prox = element.lista_de_pontos[0];
-      canvas.drawPoints(PointMode.points,
-          paintFunction(elemento_atual, elemento_prox), paint);
-    }
+    canvas.drawPoints(
+        PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
+  }
+  if (element.type == "Poligono") {
+    Points elemento_atual =
+        element.lista_de_pontos[element.lista_de_pontos.length - 1];
+    Points elemento_prox = element.lista_de_pontos[0];
+    canvas.drawPoints(
+        PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
   }
 }
