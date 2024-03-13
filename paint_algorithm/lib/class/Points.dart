@@ -10,16 +10,16 @@ class Points {
     return this.ponto;
   }
 
-  int getDesenhado() {
+  int getPixelId() {
     return this.id_pixel;
-  }
-
-  void setOffset(Offset ponto) {
-    this.ponto = ponto;
   }
 
   void setPixelId(int pixel_id) {
     this.id_pixel = pixel_id;
+  }
+
+  void setOffset(Offset ponto) {
+    this.ponto = ponto;
   }
 
   // verificar se o Ponto é de um objeto ou é um pixel solo

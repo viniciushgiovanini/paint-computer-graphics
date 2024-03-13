@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:paint_algorithm/class/Points.dart';
 
 // meus imports
-import '../algorithms/dda.dart';
-import '../algorithms/bresenham.dart';
-import '../algorithms/bresenhamcirc.dart';
-import 'Util.dart';
 import "../class/Object.dart";
 
 // ignore: must_be_immutable
@@ -48,15 +44,13 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             widget.points_class,
             Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()))) {
-          setState(() {
-            if (widget.mode_text == "Painter") {
-              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-                  details.localPosition.dy.roundToDouble()));
-              newObject.setOffset(points_unico);
-              newObject.setPixelId(widget.pixel_id);
-              widget.attPoints([newObject]);
-            }
-          });
+          if (widget.mode_text == "Painter") {
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            newObject.setOffset(points_unico);
+            newObject.setPixelId(widget.pixel_id);
+            widget.attPoints([newObject]);
+          }
         }
       },
       onPanUpdate: (details) {
@@ -65,218 +59,184 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             widget.points_class,
             Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()))) {
-          setState(() {
-            if (widget.mode_text == "Painter") {
-              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-                  details.localPosition.dy.roundToDouble()));
-              newObject.setOffset(points_unico);
-              newObject.setPixelId(widget.pixel_id);
-              widget.attPoints([newObject]);
-            }
-          });
+          if (widget.mode_text == "Painter") {
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            newObject.setOffset(points_unico);
+            newObject.setPixelId(widget.pixel_id);
+            widget.attPoints([newObject]);
+          }
         }
       },
       onTapDown: (details) {
-        Points newObject = new Points();
+        if (widget.mode_text == "Reta") {
+          if (widget.lista_objetos.length == 0 ||
+              widget.lista_objetos[widget.lista_objetos.length - 1]
+                      .lista_de_pontos.length ==
+                  2) {
+            Points new_point = new Points();
 
-        points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-            details.localPosition.dy.roundToDouble()));
-        newObject.setOffset(points_unico);
-        newObject.setPixelId(widget.pixel_id);
-        widget.attPoints([newObject]);
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            new_point.setOffset(points_unico);
+            new_point.setPixelId(widget.pixel_id);
 
-        if (widget.mode_text == "Reta" ||
-            widget.mode_text == "Circunferencia") {
-          if (widget.mode_algoritmo == "DDA" && widget.mode_text == "Reta") {
-            paintLine(
-              widget.mode_algoritmo,
-              save_pontos_att,
-              points_unico,
-              widget.points_class,
-              widget.attPoints,
-              widget.lista_objetos,
-              widget.attListaObject,
-              paintDDA,
-            );
-          } else if (widget.mode_algoritmo == "Bresenham" &&
-              widget.mode_text == "Reta") {
-            paintLine(
-              widget.mode_algoritmo,
-              save_pontos_att,
-              points_unico,
-              widget.points_class,
-              widget.attPoints,
-              widget.lista_objetos,
-              widget.attListaObject,
-              paintBresenhamGeneric,
-            );
-          } else if (widget.mode_text == "Circunferencia") {
-            paintLine(
-              widget.mode_algoritmo,
-              save_pontos_att,
-              points_unico,
-              widget.points_class,
-              widget.attPoints,
-              widget.lista_objetos,
-              widget.attListaObject,
-              paintCirc,
-            );
-          }
-        } else if (widget.mode_text == "Poligono") {
-          if (widget.mode_algoritmo == "DDA") {
-            paintPolygon(
-              widget.mode_algoritmo,
-              save_pontos_att,
-              points_unico,
-              widget.points_class,
-              widget.attPoints,
-              widget.lista_objetos,
-              widget.attListaObject,
-              paintDDA,
-            );
-          } else if (widget.mode_algoritmo == "Bresenham") {
-            paintPolygon(
-              widget.mode_algoritmo,
-              save_pontos_att,
-              points_unico,
-              widget.points_class,
-              widget.attPoints,
-              widget.lista_objetos,
-              widget.attListaObject,
-              paintBresenhamGeneric,
-            );
+            Object new_object = new Object();
+            new_object.setLastId(widget.pixel_id);
+            new_object.setListaPonto([new_point]);
+            widget.lista_objetos.add(new_object);
+          } else {
+            Points new_point = new Points();
+
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            new_point.setOffset(points_unico);
+            new_point.setPixelId(widget.pixel_id);
+
+            Object old_object =
+                widget.lista_objetos[widget.lista_objetos.length - 1];
+            widget.lista_objetos.remove(old_object);
+            old_object.setLastId(old_object.getlastId());
+            old_object.lista_de_pontos.add(new_point);
+            widget.lista_objetos.add(old_object);
+
+            // Atualizando PIXEL ID NA RETA
+            widget.updatePixelID_gesture_detector(++widget.pixel_id);
           }
         }
+
+        // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
+        widget.attListaObject(widget.lista_objetos);
       },
       onPanEnd: (details) {
-        int newID = ++widget.pixel_id;
-        widget.updatePixelID_gesture_detector(newID);
+        // int newID = ++widget.pixel_id;
+        // widget.updatePixelID_gesture_detector(newID);
       },
       onTapUp: (details) {
-        int newID = ++widget.pixel_id;
-        widget.updatePixelID_gesture_detector(newID);
+        // int newID = ++widget.pixel_id;
+        // widget.updatePixelID_gesture_detector(newID);
       },
     );
   }
 }
 
-// #################
-// Funcoes de Check
-// #################
+// // #################
+// // Funcoes de Check
+// // #################
 
-void paintLine(
-  String mode_algoritmo,
-  List<Offset> save_pontos_att,
-  Offset points_unico,
-  List<Points> points_class,
-  Function(List<Points>) attPoints,
-  List<Object> lista_objetos,
-  Function(List<Object>) attListaObject,
-  Function painterAlg,
-) {
-  // Lista para verificar se são pontos distintos, para não partir da ultima reta desenhada
-  // if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
-  save_pontos_att.add(points_unico);
-  if (save_pontos_att.length == 2) {
-    Util obj = new Util();
-    if (lista_objetos.length != 0) {
-      lista_objetos = obj.createListObject(points_class);
-    } else {
-      lista_objetos = obj.createListObject(points_class);
-    }
+// void paintLine(
+//   String mode_algoritmo,
+//   List<Offset> save_pontos_att,
+//   Offset points_unico,
+//   List<Points> points_class,
+//   Function(List<Points>) attPoints,
+//   List<Object> lista_objetos,
+//   Function(List<Object>) attListaObject,
+//   Function painterAlg,
+// ) {
+//   // Lista para verificar se são pontos distintos, para não partir da ultima reta desenhada
+//   // if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
+//   save_pontos_att.add(points_unico);
+//   if (save_pontos_att.length == 2) {
+//     Util obj = new Util();
+//     if (lista_objetos.length != 0) {
+//       lista_objetos = obj.createListObject(points_class);
+//     } else {
+//       lista_objetos = obj.createListObject(points_class);
+//     }
 
-    if (lista_objetos.length != 0) {
-      Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
-      Object objeto_final = lista_objetos[lista_objetos.length - 1];
+//     if (lista_objetos.length != 0) {
+//       Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
+//       Object objeto_final = lista_objetos[lista_objetos.length - 1];
 
-      // conficao de erro para voce não usar por exemplo dda --> paint --> dda se vc ficar alternando o modo buga a lista de objeto
-      Points new_instance = new Points();
+//       // conficao de erro para voce não usar por exemplo dda --> paint --> dda se vc ficar alternando o modo buga a lista de objeto
+//       Points new_instance = new Points();
 
-      if (new_instance.isSoloPixel(objeto_inicial.lista_de_pontos) &&
-          new_instance.isSoloPixel(objeto_final.lista_de_pontos)) {
-        lista_objetos.remove(objeto_inicial);
-        lista_objetos.remove(objeto_final);
+//       if (new_instance.isSoloPixel(objeto_inicial.lista_de_pontos) &&
+//           new_instance.isSoloPixel(objeto_final.lista_de_pontos)) {
+//         lista_objetos.remove(objeto_inicial);
+//         lista_objetos.remove(objeto_final);
 
-        lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
+//         lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
 
-        points_class.clear();
+//         points_class.clear();
 
-        attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
-        attListaObject(lista_objetos);
-      }
-    }
-    save_pontos_att.clear();
-  }
-}
+//         attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
+//         attListaObject(lista_objetos);
+//       }
+//     }
+//     save_pontos_att.clear();
+//   }
+// }
+// // }
+
+// void paintPolygon(
+//   String mode_algoritmo,
+//   List<Offset> save_pontos_att,
+//   Offset points_unico,
+//   List<Points> points_class,
+//   Function(List<Points>) attPoints,
+//   List<Object> lista_objetos,
+//   Function(List<Object>) attListaObject,
+//   Function painterAlg,
+// ) {
+//   if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
+//     if (lista_objetos.length == 0 && save_pontos_att.length != 0) {
+//       save_pontos_att.clear();
+//     } else {
+//       lista_objetos.removeWhere((element) {
+//         return element.lastId == -10;
+//       });
+//     }
+
+//     save_pontos_att.add(points_unico);
+//     if (save_pontos_att.length > 1) {
+//       Util obj = new Util();
+//       lista_objetos = obj.createListObject(points_class);
+
+//       if (lista_objetos.length != 0) {
+//         Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
+
+//         Object objeto_final = lista_objetos[lista_objetos.length - 1];
+
+//         lista_objetos.remove(objeto_inicial);
+//         lista_objetos.remove(objeto_final);
+
+//         if (objeto_inicial.lista_de_pontos.length > 1) {
+//           Object new_obj_incial = new Object();
+//           new_obj_incial.lista_de_pontos.add(objeto_inicial
+//               .lista_de_pontos[objeto_inicial.lista_de_pontos.length - 1]);
+//           print(new_obj_incial);
+//           objeto_inicial.lista_de_pontos.removeLast();
+//           new_obj_incial = painterAlg(new_obj_incial, objeto_final);
+//           new_obj_incial =
+//               new_obj_incial.mergerTwoObjects(objeto_inicial, new_obj_incial);
+//           List<Offset> lista_verificar_repetido =
+//               new_obj_incial.mergeAllPointstoListOffset(new_obj_incial);
+//           if (hasDuplicates(lista_verificar_repetido)) {
+//             save_pontos_att.clear();
+//             new_obj_incial.lista_de_pontos.removeLast();
+//           }
+//           lista_objetos.add(objeto_inicial);
+//         } else {
+//           lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
+//         }
+
+//         points_class.clear();
+
+//         attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
+//         attListaObject(lista_objetos);
+//       }
+//     } else {
+//       Object obj = new Object();
+//       obj.setListaPonto(points_class);
+//       obj.setLastId(-10);
+//       lista_objetos.add(obj);
+//       attListaObject(lista_objetos);
+//     }
+//   }
 // }
 
-void paintPolygon(
-  String mode_algoritmo,
-  List<Offset> save_pontos_att,
-  Offset points_unico,
-  List<Points> points_class,
-  Function(List<Points>) attPoints,
-  List<Object> lista_objetos,
-  Function(List<Object>) attListaObject,
-  Function painterAlg,
-) {
-  if ((mode_algoritmo == "DDA" || mode_algoritmo == "Bresenham")) {
-    if (lista_objetos.length == 0 && save_pontos_att.length != 0) {
-      save_pontos_att.clear();
-    } else {
-      lista_objetos.removeWhere((element) {
-        return element.lastId == -10;
-      });
-    }
-
-    save_pontos_att.add(points_unico);
-    if (save_pontos_att.length > 1) {
-      Util obj = new Util();
-      lista_objetos = obj.createListObject(points_class);
-
-      if (lista_objetos.length != 0) {
-        Object objeto_inicial = lista_objetos[lista_objetos.length - 2];
-
-        Object objeto_final = lista_objetos[lista_objetos.length - 1];
-
-        lista_objetos.remove(objeto_inicial);
-        lista_objetos.remove(objeto_final);
-
-        if (objeto_inicial.lista_de_pontos.length > 1) {
-          Object new_obj_incial = new Object();
-          new_obj_incial.lista_de_pontos.add(objeto_inicial
-              .lista_de_pontos[objeto_inicial.lista_de_pontos.length - 1]);
-          print(new_obj_incial);
-          objeto_inicial.lista_de_pontos.removeLast();
-          new_obj_incial = painterAlg(new_obj_incial, objeto_final);
-          new_obj_incial =
-              new_obj_incial.mergerTwoObjects(objeto_inicial, new_obj_incial);
-          List<Offset> lista_verificar_repetido =
-              new_obj_incial.mergeAllPointstoListOffset(new_obj_incial);
-          if (hasDuplicates(lista_verificar_repetido)) {
-            save_pontos_att.clear();
-            new_obj_incial.lista_de_pontos.removeLast();
-          }
-          lista_objetos.add(objeto_inicial);
-        } else {
-          lista_objetos.add(painterAlg(objeto_inicial, objeto_final));
-        }
-
-        points_class.clear();
-
-        attPoints(objeto_inicial.objectListtoPointsList(lista_objetos));
-        attListaObject(lista_objetos);
-      }
-    } else {
-      Object obj = new Object();
-      obj.setListaPonto(points_class);
-      obj.setLastId(-10);
-      lista_objetos.add(obj);
-      attListaObject(lista_objetos);
-    }
-  }
-}
-
-bool hasDuplicates(List<Offset> list) {
-  return list[0] == list[list.length - 1];
-}
+// bool hasDuplicates(List<Offset> list) {
+//   return list[0] == list[list.length - 1];
+// }

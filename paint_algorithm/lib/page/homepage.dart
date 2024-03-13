@@ -10,6 +10,12 @@ import '../resource/GetGestureDetector.dart';
 import '../class/Points.dart';
 import '../class/Object.dart';
 
+// Algs
+import '../algorithms/dda.dart';
+import '../algorithms/bresenham.dart';
+import '../algorithms/bresenhamcirc.dart';
+import '../resource/Util.dart';
+
 // ###########################
 // Classe do ViewerInteractive
 // ###########################
@@ -59,6 +65,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
                 setState(() {
                   pixel_id = p0;
                 });
+                "".toString();
               },
               pixel_id: pixel_id,
               points_class: points_class,
@@ -135,7 +142,12 @@ class _CanvaWidgetState extends State<CanvaWidget> {
       body: Container(
         child: CustomPaint(
           size: Size(widget.width, widget.height),
-          painter: Canva(widget.points_class),
+          painter: Canva(
+            points_class: widget.points_class,
+            lista_de_objetos: widget.lista_objetos,
+            mode_algoritmo: widget.mode_algoritmo,
+            mode_text: widget.mode_text,
+          ),
           child: GetGestureMouse(
             attListaObject: (p0) {
               widget.attListaObject(p0);
@@ -166,8 +178,16 @@ class _CanvaWidgetState extends State<CanvaWidget> {
 
 class Canva extends CustomPainter {
   List<Points> points_class = [];
+  final List<Object> lista_de_objetos;
+  String mode_algoritmo = "";
+  String mode_text = "";
 
-  Canva(this.points_class);
+  Canva({
+    required this.points_class,
+    required this.lista_de_objetos,
+    required this.mode_algoritmo,
+    required this.mode_text,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -180,13 +200,63 @@ class Canva extends CustomPainter {
     canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
 
-    points_class.forEach((point) {
-      canvas.drawPoints(PointMode.points, [point.ponto], paint);
-    });
+    if (points_class.length >= 1) {
+      points_class.forEach((point) {
+        canvas.drawPoints(PointMode.points, [point.ponto], paint);
+      });
+    }
+    if (lista_de_objetos.length >= 1) {
+      paintLineOrCirc(
+          lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
+      "".toString();
+    }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
+}
+
+void paintLineOrCirc(
+  List<Object> lista_de_objetos,
+  String mode_text,
+  String mode_algoritmo,
+  Canvas canvas,
+  Paint paint,
+) {
+  if (mode_algoritmo == "DDA") {
+    lista_de_objetos.forEach((element) {
+      if (setTwoPoints(element)) {
+        print("AAAAAAAAAAAAAAAA");
+        "".toString();
+        canvas.drawPoints(
+            PointMode.points,
+            paintDDA(element.lista_de_pontos[0], element.lista_de_pontos[1]),
+            paint);
+      } else {
+        canvas.drawPoints(
+            PointMode.points,
+            [
+              Offset(
+                  lista_de_objetos[lista_de_objetos.length - 1]
+                      .lista_de_pontos[0]
+                      .ponto
+                      .dx,
+                  lista_de_objetos[lista_de_objetos.length - 1]
+                      .lista_de_pontos[0]
+                      .ponto
+                      .dy)
+            ],
+            paint);
+      }
+    });
+  }
+}
+
+bool setTwoPoints(Object objeto) {
+  if (objeto.lista_de_pontos.length >= 2) {
+    return true;
+  }
+  return false;
 }
