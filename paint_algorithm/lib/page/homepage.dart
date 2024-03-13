@@ -208,7 +208,6 @@ class Canva extends CustomPainter {
     if (lista_de_objetos.length >= 1) {
       paintLineOrCirc(
           lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
-      "".toString();
     }
   }
 
@@ -225,33 +224,44 @@ void paintLineOrCirc(
   Canvas canvas,
   Paint paint,
 ) {
-  if (mode_algoritmo == "DDA") {
-    lista_de_objetos.forEach((element) {
-      if (setTwoPoints(element)) {
-        print("AAAAAAAAAAAAAAAA");
-        "".toString();
+  lista_de_objetos.forEach((element) {
+    if (setTwoPoints(element)) {
+      if (mode_text == "Reta") {
+        if (mode_algoritmo == "DDA") {
+          canvas.drawPoints(
+              PointMode.points,
+              paintDDA(element.lista_de_pontos[0], element.lista_de_pontos[1]),
+              paint);
+        } else if (mode_algoritmo == "Bresenham") {
+          canvas.drawPoints(
+              PointMode.points,
+              paintBresenhamGeneric(
+                  element.lista_de_pontos[0], element.lista_de_pontos[1]),
+              paint);
+        }
+      } else if (mode_text == "Circunferencia") {
         canvas.drawPoints(
             PointMode.points,
-            paintDDA(element.lista_de_pontos[0], element.lista_de_pontos[1]),
-            paint);
-      } else {
-        canvas.drawPoints(
-            PointMode.points,
-            [
-              Offset(
-                  lista_de_objetos[lista_de_objetos.length - 1]
-                      .lista_de_pontos[0]
-                      .ponto
-                      .dx,
-                  lista_de_objetos[lista_de_objetos.length - 1]
-                      .lista_de_pontos[0]
-                      .ponto
-                      .dy)
-            ],
+            paintCirc(element.lista_de_pontos[0], element.lista_de_pontos[1]),
             paint);
       }
-    });
-  }
+    } else {
+      canvas.drawPoints(
+          PointMode.points,
+          [
+            Offset(
+                lista_de_objetos[lista_de_objetos.length - 1]
+                    .lista_de_pontos[0]
+                    .ponto
+                    .dx,
+                lista_de_objetos[lista_de_objetos.length - 1]
+                    .lista_de_pontos[0]
+                    .ponto
+                    .dy)
+          ],
+          paint);
+    }
+  });
 }
 
 bool setTwoPoints(Object objeto) {

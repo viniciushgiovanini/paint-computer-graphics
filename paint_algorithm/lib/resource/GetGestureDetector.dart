@@ -69,7 +69,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         }
       },
       onTapDown: (details) {
-        if (widget.mode_text == "Reta") {
+        if (widget.mode_text == "Reta" ||
+            widget.mode_text == "Circunferencia") {
           if (widget.lista_objetos.length == 0 ||
               widget.lista_objetos[widget.lista_objetos.length - 1]
                       .lista_de_pontos.length ==

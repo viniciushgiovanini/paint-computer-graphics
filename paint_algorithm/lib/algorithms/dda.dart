@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../class/Object.dart';
 import '../class/Points.dart';
 
 List<Offset> paintDDA(Points ponto_inicial, Points ponto_final) {
