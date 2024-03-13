@@ -5,6 +5,15 @@ class Object {
   List<Points> lista_de_pontos = [];
   int lastId = 0;
   String type = "Ponto";
+  // String tool = "";
+
+  // void setTool(String tool) {
+  //   this.tool = tool;
+  // }
+
+  // String getTool() {
+  //   return this.tool;
+  // }
 
   void setType(String type) {
     this.type = type;
@@ -70,5 +79,17 @@ class Object {
     });
 
     return resp;
+  }
+
+  bool verificarSeObjetoEPoligono(Object obj, Offset ponto_selecionado) {
+    List<Points> lista_de_pontos = [];
+    lista_de_pontos.addAll(obj.lista_de_pontos);
+
+    for (var element in lista_de_pontos) {
+      if (element.ponto == ponto_selecionado) {
+        return true;
+      }
+    }
+    return false;
   }
 }

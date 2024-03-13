@@ -49,7 +49,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.straight, 35.0, () {
             widget.updateMode("Reta");
           }),
-          getIcon(Icons.hexagon_outlined, 35.0, () {
+          getIcon(Icons.timeline, 35.0, () {
             widget.updateMode("Poligono");
           }),
           getIcon(Icons.circle_outlined, 35.0, () {

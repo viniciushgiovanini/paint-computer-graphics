@@ -59,6 +59,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               attListaObject: (p0) {
                 setState(() {
                   lista_objetos = p0;
+                  "".toString();
                 });
               },
               updatePixelId: (p0) {
@@ -150,7 +151,9 @@ class _CanvaWidgetState extends State<CanvaWidget> {
           ),
           child: GetGestureMouse(
             attListaObject: (p0) {
-              widget.attListaObject(p0);
+              setState(() {
+                widget.attListaObject(p0);
+              });
             },
             points_class: widget.points_class,
             updatePixelID_gesture_detector: (p0) {
@@ -206,8 +209,14 @@ class Canva extends CustomPainter {
       });
     }
     if (lista_de_objetos.length >= 1) {
-      paintLineOrCirc(
-          lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
+      // if (mode_text == "Reta") {
+      paintVerify(
+          lista_de_objetos, mode_text, mode_algoritmo, canvas, paint, "Reta");
+      // }
+      // else if (mode_text == "Poligono") {
+      //   paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint,
+      //       "Poligono");
+      // }
     }
   }
 
@@ -217,34 +226,54 @@ class Canva extends CustomPainter {
   }
 }
 
-void paintLineOrCirc(
+bool setTwoPoints(Object objeto) {
+  if (objeto.lista_de_pontos.length >= 2) {
+    return true;
+  }
+  return false;
+}
+
+void paintVerify(
   List<Object> lista_de_objetos,
   String mode_text,
   String mode_algoritmo,
   Canvas canvas,
   Paint paint,
+  String elementoPai,
 ) {
   lista_de_objetos.forEach((element) {
     if (element.type != "Ponto") {
-      if (element.type == "Reta") {
-        if (mode_algoritmo == "DDA") {
+      // if (element.type == elementoPai) {
+      if (mode_algoritmo == "DDA") {
+        for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
+          Points elemento_atual = element.lista_de_pontos[i];
+          Points elemento_prox = element.lista_de_pontos[i + 1];
+
           canvas.drawPoints(
-              PointMode.points,
-              paintDDA(element.lista_de_pontos[0], element.lista_de_pontos[1]),
-              paint);
-        } else if (mode_algoritmo == "Bresenham") {
-          canvas.drawPoints(
-              PointMode.points,
-              paintBresenhamGeneric(
-                  element.lista_de_pontos[0], element.lista_de_pontos[1]),
-              paint);
+              PointMode.points, paintDDA(elemento_atual, elemento_prox), paint);
         }
-      } else if (element.type == "Circunferencia") {
+        if (element.type == "Poligono") {
+          Points elemento_atual =
+              element.lista_de_pontos[element.lista_de_pontos.length - 1];
+          Points elemento_prox = element.lista_de_pontos[0];
+          canvas.drawPoints(
+              PointMode.points, paintDDA(elemento_atual, elemento_prox), paint);
+        }
+      } else if (mode_algoritmo == "Bresenham") {
         canvas.drawPoints(
             PointMode.points,
-            paintCirc(element.lista_de_pontos[0], element.lista_de_pontos[1]),
+            paintBresenhamGeneric(
+                element.lista_de_pontos[element.lista_de_pontos.length - 2],
+                element.lista_de_pontos[element.lista_de_pontos.length - 1]),
             paint);
       }
+      // }
+    } else if (element.type == "Circunferencia") {
+      canvas.drawPoints(
+          PointMode.points,
+          paintCirc(element.lista_de_pontos[element.lista_de_pontos.length - 2],
+              element.lista_de_pontos[element.lista_de_pontos.length - 1]),
+          paint);
     } else {
       canvas.drawPoints(
           PointMode.points,
@@ -264,9 +293,19 @@ void paintLineOrCirc(
   });
 }
 
-bool setTwoPoints(Object objeto) {
-  if (objeto.lista_de_pontos.length >= 2) {
-    return true;
-  }
-  return false;
-}
+// void paintPolygon(
+//   List<Object> lista_de_objetos,
+//   String mode_text,
+//   String mode_algoritmo,
+//   Canvas canvas,
+//   Paint paint,
+// ) {
+//   lista_de_objetos.forEach((element) {
+//     if (element.type == "Poligono") {
+//       if (mode_algoritmo == "DDA") {
+//         paintLineOrCirc(
+//             lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
+//       }
+//     }
+//   });
+// }

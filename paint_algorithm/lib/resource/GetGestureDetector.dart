@@ -97,7 +97,6 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             Object old_object =
                 widget.lista_objetos[widget.lista_objetos.length - 1];
             widget.lista_objetos.remove(old_object);
-            old_object.setLastId(old_object.getlastId());
             old_object.lista_de_pontos.add(new_point);
             old_object.setType(widget.mode_text);
             widget.lista_objetos.add(old_object);
@@ -105,10 +104,90 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             // Atualizando PIXEL ID NA RETA
             widget.updatePixelID_gesture_detector(++widget.pixel_id);
           }
-        }
+        } else if (widget.mode_text == "Poligono") {
+          if (widget.lista_objetos.length == 0 ||
+              widget.lista_objetos[0].verificarSeObjetoEPoligono(
+                  widget.lista_objetos[widget.lista_objetos.length - 1],
+                  Offset(details.localPosition.dx.roundToDouble(),
+                      details.localPosition.dy.roundToDouble())) ||
+              widget.lista_objetos[widget.lista_objetos.length - 1].type ==
+                  "Poligono") {
+            // Esse if implica que a lista tem que existe e o elemento não pode ser um poligono para continuar, assim tendo que ser um ponto
+            if (widget.lista_objetos.length != 0) {
+              if (widget.lista_objetos[0].verificarSeObjetoEPoligono(
+                  widget.lista_objetos[widget.lista_objetos.length - 1],
+                  Offset(details.localPosition.dx.roundToDouble(),
+                      details.localPosition.dy.roundToDouble()))) {
+                // CONDICAO DE PARADA PARA DESCONECTAR O POLIGONO
 
-        // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
-        widget.attListaObject(widget.lista_objetos);
+                Object poligono_final = new Object();
+
+                poligono_final.setLastId(widget
+                    .lista_objetos[widget.lista_objetos.length - 1].lastId);
+                poligono_final.setListaPonto(widget
+                    .lista_objetos[widget.lista_objetos.length - 1]
+                    .lista_de_pontos);
+                poligono_final.setType("Poligono");
+                widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
+                widget.lista_objetos.add(poligono_final);
+                // widget.lista_objetos[widget.lista_objetos.length - 1].type ==
+                //     "Poligono";
+                "".toString();
+                "".toString();
+                "".toString();
+                "".toString();
+                "".toString();
+                "".toString();
+                widget.attListaObject(widget.lista_objetos);
+              } else {
+                // Cria o primeiro ponto do poligono
+                Points new_point = new Points();
+
+                points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                    details.localPosition.dy.roundToDouble()));
+                new_point.setOffset(points_unico);
+                new_point.setPixelId(widget.pixel_id);
+
+                Object new_object = new Object();
+                new_object.setLastId(widget.pixel_id);
+                new_object.setListaPonto([new_point]);
+                widget.lista_objetos.add(new_object);
+              }
+            } else {
+              // Cria o primeiro ponto do poligono
+              Points new_point = new Points();
+
+              points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble()));
+              new_point.setOffset(points_unico);
+              new_point.setPixelId(widget.pixel_id);
+
+              Object new_object = new Object();
+              new_object.setLastId(widget.pixel_id);
+              new_object.setListaPonto([new_point]);
+              widget.lista_objetos.add(new_object);
+            }
+            // Atualizando PIXEL ID NA RETA
+            widget.updatePixelID_gesture_detector(++widget.pixel_id);
+          } else {
+            // Cria os outros pontos
+            Points new_point = new Points();
+
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+            new_point.setOffset(points_unico);
+
+            Object old_object =
+                widget.lista_objetos[widget.lista_objetos.length - 1];
+            widget.lista_objetos.remove(old_object);
+            new_point.setPixelId(old_object.lastId);
+            old_object.lista_de_pontos.add(new_point);
+            old_object.setType("Reta");
+            widget.lista_objetos.add(old_object);
+            // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
+            widget.attListaObject(widget.lista_objetos);
+          }
+        }
       },
       onPanEnd: (details) {
         int newID = ++widget.pixel_id;
