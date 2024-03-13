@@ -210,8 +210,7 @@ class Canva extends CustomPainter {
     }
     if (lista_de_objetos.length >= 1) {
       // if (mode_text == "Reta") {
-      paintVerify(
-          lista_de_objetos, mode_text, mode_algoritmo, canvas, paint, "Reta");
+      paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
       // }
       // else if (mode_text == "Poligono") {
       //   paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint,
@@ -233,41 +232,16 @@ bool setTwoPoints(Object objeto) {
   return false;
 }
 
-void paintVerify(
-  List<Object> lista_de_objetos,
-  String mode_text,
-  String mode_algoritmo,
-  Canvas canvas,
-  Paint paint,
-  String elementoPai,
-) {
+void paintVerify(List<Object> lista_de_objetos, String mode_text,
+    String mode_algoritmo, Canvas canvas, Paint paint) {
   lista_de_objetos.forEach((element) {
-    if (element.type != "Ponto") {
-      // if (element.type == elementoPai) {
-      if (mode_algoritmo == "DDA") {
-        for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
-          Points elemento_atual = element.lista_de_pontos[i];
-          Points elemento_prox = element.lista_de_pontos[i + 1];
-
-          canvas.drawPoints(
-              PointMode.points, paintDDA(elemento_atual, elemento_prox), paint);
-        }
-        if (element.type == "Poligono") {
-          Points elemento_atual =
-              element.lista_de_pontos[element.lista_de_pontos.length - 1];
-          Points elemento_prox = element.lista_de_pontos[0];
-          canvas.drawPoints(
-              PointMode.points, paintDDA(elemento_atual, elemento_prox), paint);
-        }
-      } else if (mode_algoritmo == "Bresenham") {
-        canvas.drawPoints(
-            PointMode.points,
-            paintBresenhamGeneric(
-                element.lista_de_pontos[element.lista_de_pontos.length - 2],
-                element.lista_de_pontos[element.lista_de_pontos.length - 1]),
-            paint);
+    if (element.type != "Ponto" && element.type != "Circunferencia") {
+      if (mode_text == "DDA") {
+        paintRetas(mode_text, mode_algoritmo, canvas, paint, element, paintDDA);
+      } else {
+        paintRetas(mode_text, mode_algoritmo, canvas, paint, element,
+            paintBresenhamGeneric);
       }
-      // }
     } else if (element.type == "Circunferencia") {
       canvas.drawPoints(
           PointMode.points,
@@ -293,19 +267,38 @@ void paintVerify(
   });
 }
 
-// void paintPolygon(
-//   List<Object> lista_de_objetos,
-//   String mode_text,
-//   String mode_algoritmo,
-//   Canvas canvas,
-//   Paint paint,
-// ) {
-//   lista_de_objetos.forEach((element) {
-//     if (element.type == "Poligono") {
-//       if (mode_algoritmo == "DDA") {
-//         paintLineOrCirc(
-//             lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
-//       }
-//     }
-//   });
-// }
+void paintRetas(
+  String mode_text,
+  String mode_algoritmo,
+  Canvas canvas,
+  Paint paint,
+  Object element,
+  Function paintFunction,
+) {
+  if (mode_algoritmo == "DDA") {
+    for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
+      Points elemento_atual = element.lista_de_pontos[i];
+      Points elemento_prox = element.lista_de_pontos[i + 1];
+
+      canvas.drawPoints(PointMode.points,
+          paintFunction(elemento_atual, elemento_prox), paint);
+    }
+    if (element.type == "Poligono") {
+      Points elemento_atual =
+          element.lista_de_pontos[element.lista_de_pontos.length - 1];
+      Points elemento_prox = element.lista_de_pontos[0];
+      canvas.drawPoints(PointMode.points,
+          paintFunction(elemento_atual, elemento_prox), paint);
+    }
+  }
+}
+
+
+// else if (mode_algoritmo == "Bresenham") {
+//     canvas.drawPoints(
+//         PointMode.points,
+//         paintBresenhamGeneric(
+//             element.lista_de_pontos[element.lista_de_pontos.length - 2],
+//             element.lista_de_pontos[element.lista_de_pontos.length - 1]),
+//         paint);
+//   }
