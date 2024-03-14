@@ -24,12 +24,14 @@ Widget getPopUpMenuButtom(
       iconSize: 35.0,
       itemBuilder: (BuildContext context) => items,
       onSelected: (String value) {
-        if (value == "DDA") {
-          updateMode("DDA");
-        } else if (value == "Bresenham-Reta") {
-          updateMode("Bresenham-Reta");
-        } else if (value == "Bresenham-Circ") {
-          updateMode("Bresenham-Circ");
+        if (value == "Translacao") {
+          updateMode("Translacao");
+        } else if (value == "Rotacao") {
+          updateMode("Rotacao");
+        } else if (value == "Escala") {
+          updateMode("Escala");
+        } else if (value == "Reflexao") {
+          updateMode("Reflexao");
         }
       });
 }

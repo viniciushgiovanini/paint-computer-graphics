@@ -24,6 +24,7 @@ class ViewerInteractive extends StatefulWidget {
   String mode_algoritmo;
   void Function(String) updateStringMode;
   void Function(String) updateModeAlgoritmo;
+  double angle = 180.0;
 
   ViewerInteractive(
       {super.key,
@@ -72,6 +73,9 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           ),
         )),
         VerticalBarScreen(
+          updateAngle: (p0) {
+            widget.angle = p0;
+          },
           lista_objetos: lista_objetos,
           updateModeAlgoritmo: (p0) {
             widget.updateModeAlgoritmo(p0);
