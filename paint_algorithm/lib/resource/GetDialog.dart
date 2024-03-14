@@ -84,8 +84,3 @@ Future<void> getDialog(
     },
   );
 }
-
-
-// #######################################
-// METODO PARA NÃO PERDER O VALOR DO BOTÃO
-// #######################################

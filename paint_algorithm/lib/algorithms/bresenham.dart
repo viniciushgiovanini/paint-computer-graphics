@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import '../class/Object.dart';
+import '../class/Points.dart';
 
-Object paintBresenhamGeneric(Object objeto_inicial, Object objeto_final) {
-  Object objeto_resultdo_do_bresenham = new Object();
-  int id_objeto_resultado_bresenham = objeto_inicial.lastId;
+List<Offset> paintBresenhamGeneric(Points ponto_inicial, Points ponto_final) {
+  List<Offset> objeto_resultdo_do_bresenham = [];
 
-  int x1 = objeto_inicial.lista_de_pontos[0].ponto.dx.roundToDouble().toInt();
-  int y1 = objeto_inicial.lista_de_pontos[0].ponto.dy.roundToDouble().toInt();
-  int x2 = objeto_final.lista_de_pontos[0].ponto.dx.roundToDouble().toInt();
-  int y2 = objeto_final.lista_de_pontos[0].ponto.dy.roundToDouble().toInt();
+  int x1 = ponto_inicial.ponto.dx.roundToDouble().toInt();
+  int y1 = ponto_inicial.ponto.dy.roundToDouble().toInt();
+  int x2 = ponto_final.ponto.dx.roundToDouble().toInt();
+  int y2 = ponto_final.ponto.dy.roundToDouble().toInt();
 
   int dx, dy, x, y, i, const1, const2, p, increx, increy;
 
@@ -31,9 +30,9 @@ Object paintBresenhamGeneric(Object objeto_inicial, Object objeto_final) {
 
   // points.clear();
   // points.add(Offset(x.roundToDouble(), y.roundToDouble()));
-  objeto_resultdo_do_bresenham.appendNovoPonto(
-      Offset(x.roundToDouble(), y.roundToDouble()),
-      id_objeto_resultado_bresenham);
+  objeto_resultdo_do_bresenham
+      .add(Offset(x.roundToDouble(), y.roundToDouble()));
+  ;
 
   if (dy < dx) {
     p = 2 * dy - dx;
@@ -47,9 +46,8 @@ Object paintBresenhamGeneric(Object objeto_inicial, Object objeto_final) {
         y += increy;
         p += const2;
       }
-      objeto_resultdo_do_bresenham.appendNovoPonto(
-          Offset(x.roundToDouble(), y.roundToDouble()),
-          id_objeto_resultado_bresenham);
+      objeto_resultdo_do_bresenham
+          .add(Offset(x.roundToDouble(), y.roundToDouble()));
       // points.add(Offset(x.roundToDouble(), y.roundToDouble()));
     }
   } else {
@@ -64,9 +62,8 @@ Object paintBresenhamGeneric(Object objeto_inicial, Object objeto_final) {
         x += increx;
         p += const2;
       }
-      objeto_resultdo_do_bresenham.appendNovoPonto(
-          Offset(x.roundToDouble(), y.roundToDouble()),
-          id_objeto_resultado_bresenham);
+      objeto_resultdo_do_bresenham
+          .add(Offset(x.roundToDouble(), y.roundToDouble()));
       // points.add(Offset(x.roundToDouble(), y.roundToDouble()));
     }
   }
