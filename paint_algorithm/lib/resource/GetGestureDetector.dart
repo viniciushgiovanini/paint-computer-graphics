@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // meus imports
 import "../class/Object.dart";
+import '../algorithms/transformacoes.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -34,11 +35,9 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanStart: (details) {
-        Object newObject = new Object();
-        if (!newObject.isList(
-            widget.points_class,
-            Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
+        if (!widget.points_class.contains(Offset(
+            details.localPosition.dx.roundToDouble(),
+            details.localPosition.dy.roundToDouble()))) {
           if (widget.mode_text == "Painter") {
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
@@ -51,11 +50,9 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         }
       },
       onPanUpdate: (details) {
-        Object newObject = new Object();
-        if (!newObject.isList(
-            widget.points_class,
-            Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
+        if (!widget.points_class.contains(Offset(
+            details.localPosition.dx.roundToDouble(),
+            details.localPosition.dy.roundToDouble()))) {
           if (widget.mode_text == "Painter") {
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
@@ -94,6 +91,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             widget.lista_objetos.remove(old_object);
             old_object.lista_de_pontos.add(points_unico);
             old_object.setType(widget.mode_text);
+            old_object.calculateCentralPoint();
             widget.lista_objetos.add(old_object);
           }
         } else if (widget.mode_text == "Poligono") {
@@ -115,6 +113,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
                   .lista_objetos[widget.lista_objetos.length - 1]
                   .lista_de_pontos);
               poligono_final.setType("Poligono");
+              poligono_final.calculateCentralPoint();
               widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
               widget.lista_objetos.add(poligono_final);
               // widget.attListaObject(widget.lista_objetos);
@@ -147,6 +146,17 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             new_object.setListaPonto([points_unico]);
             widget.lista_objetos.add(new_object);
           }
+        } else if (widget.mode_text == "Translacao") {
+          points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+              details.localPosition.dy.roundToDouble()));
+          Object elemento_transladar =
+              widget.lista_objetos[widget.lista_objetos.length - 1];
+          widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
+
+          elemento_transladar.lista_de_pontos = transladarObjeto(
+              elemento_transladar.lista_de_pontos, points_unico);
+          elemento_transladar.calculateCentralPoint();
+          widget.lista_objetos.add(elemento_transladar);
         }
         widget.attListaObject(widget.lista_objetos);
       },

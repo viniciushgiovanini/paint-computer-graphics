@@ -6,7 +6,7 @@ import "PopupMenuButton.dart";
 import 'GetDialog.dart';
 
 // Algs imports
-import '../algorithms/rotacao.dart';
+import '../algorithms/transformacoes.dart';
 import '../class/Object.dart';
 
 class VerticalBarScreen extends StatefulWidget {
@@ -31,6 +31,8 @@ class VerticalBarScreen extends StatefulWidget {
 }
 
 class _VerticalBarScreenState extends State<VerticalBarScreen> {
+  FocusNode _focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,19 +71,18 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
             height: 40,
             child: TextField(
               textAlign: TextAlign.center,
+              focusNode: _focusNode,
               decoration: InputDecoration(
-                  labelText: "Ang",
-                  hintText: '90.0',
+                  labelText: "Input",
+                  // hintText: '90.0',
                   border: OutlineInputBorder()),
               onSubmitted: (value) {
-                try {
-                  widget.attListaObject(initAlgoritms(widget.mode_text,
-                      widget.lista_objetos, double.parse(value)));
-                } catch (w) {
-                  // widget.updateAngle(0.0);
-                  "".toString();
-                  print("DEU RUIM");
-                }
+                widget.attListaObject(transformacoesGeometricas(
+                  widget.mode_text,
+                  widget.lista_objetos,
+                  value,
+                ));
+                _focusNode.requestFocus();
               },
             ),
           ),
@@ -95,8 +96,8 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
   }
 }
 
-List<Object> initAlgoritms(
-    String mode_text, List<Object> lista_objetos, double angle) {
+List<Object> transformacoesGeometricas(
+    String mode_text, List<Object> lista_objetos, String value) {
   // ignore: unused_local_variable
   Object last_obj = lista_objetos[lista_objetos.length - 1];
 
@@ -104,9 +105,57 @@ List<Object> initAlgoritms(
     Object last_obj = lista_objetos[lista_objetos.length - 1];
     lista_objetos.removeAt(lista_objetos.length - 1);
 
-    lista_objetos
-        .add(rotacaoObject(last_obj, angle, last_obj.lista_de_pontos[0]));
-  }
+    try {
+      lista_objetos.add(rotacaoObject(last_obj, double.parse(value)));
+    } catch (e) {
+      print("Error: " + e.toString());
+    }
+    return lista_objetos;
+  } else if (mode_text == "Escala") {
+    Object last_obj = lista_objetos[lista_objetos.length - 1];
+    lista_objetos.removeAt(lista_objetos.length - 1);
 
+    // MUDAR O METODO AQUI
+
+    // last_obj.lista_de_pontos.clear();
+    try {
+      last_obj.lista_de_pontos =
+          escalarObjeto(last_obj.lista_de_pontos, double.parse(value));
+    } catch (e) {
+      print("Error: " + e.toString());
+    }
+
+    lista_objetos.add(last_obj);
+    return lista_objetos;
+  } else if (mode_text == "Reflexao") {
+    Object last_obj = lista_objetos[lista_objetos.length - 1];
+    lista_objetos.removeAt(lista_objetos.length - 1);
+
+    List<Offset> new_points = [];
+
+    last_obj.lista_de_pontos.forEach((element) {
+      double new_dx = element.dx;
+      double new_dy = element.dy;
+
+      // Calculando as diferenças em relação ao ponto central
+      double dx_diff = element.dx - last_obj.centralPoint.dx;
+      double dy_diff = element.dy - last_obj.centralPoint.dy;
+
+      if (value == "y") {
+        new_dx = last_obj.centralPoint.dx - dx_diff;
+      } else if (value == "x") {
+        new_dy = last_obj.centralPoint.dy - dy_diff;
+      } else if (value == "xy") {
+        new_dx = last_obj.centralPoint.dx - dx_diff;
+        new_dy = last_obj.centralPoint.dy - dy_diff;
+      }
+
+      new_points.add(Offset(new_dx, new_dy));
+    });
+
+    last_obj.lista_de_pontos = new_points;
+    lista_objetos.add(last_obj);
+    return lista_objetos;
+  }
   return lista_objetos;
 }
