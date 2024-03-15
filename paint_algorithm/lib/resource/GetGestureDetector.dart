@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:paint_algorithm/class/Points.dart';
 
 // meus imports
 import "../class/Object.dart";
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
-  final Function(List<Points>) attPoints;
+  final Function(List<Offset>) attOffset;
   final Function(List<Object>) attListaObject;
   final String mode_text;
   final String mode_algoritmo;
-  final List<Points> points_class;
+  final List<Offset> points_class;
   List<Object> lista_objetos;
 
   GetGestureMouse({
@@ -18,7 +17,7 @@ class GetGestureMouse extends StatefulWidget {
     required this.attListaObject,
     required this.lista_objetos,
     required this.points_class,
-    required this.attPoints,
+    required this.attOffset,
     required this.mode_text,
     required this.mode_algoritmo,
   });
@@ -35,7 +34,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanStart: (details) {
-        Points newObject = new Points();
+        Object newObject = new Object();
         if (!newObject.isList(
             widget.points_class,
             Offset(details.localPosition.dx.roundToDouble(),
@@ -43,13 +42,16 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
           if (widget.mode_text == "Painter") {
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
-            newObject.setOffset(points_unico);
-            widget.attPoints([newObject]);
+
+            widget.attOffset([
+              Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble())
+            ]);
           }
         }
       },
       onPanUpdate: (details) {
-        Points newObject = new Points();
+        Object newObject = new Object();
         if (!newObject.isList(
             widget.points_class,
             Offset(details.localPosition.dx.roundToDouble(),
@@ -57,8 +59,10 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
           if (widget.mode_text == "Painter") {
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
-            newObject.setOffset(points_unico);
-            widget.attPoints([newObject]);
+            widget.attOffset([
+              Offset(details.localPosition.dx.roundToDouble(),
+                  details.localPosition.dy.roundToDouble())
+            ]);
           }
         }
       },
@@ -72,30 +76,23 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               widget.lista_objetos[widget.lista_objetos.length - 1].type ==
                   "Poligono") {
             // INICIA NOVO OBJETO
-
-            Points new_point = new Points();
-
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
-            new_point.setOffset(points_unico);
 
             Object new_object = new Object();
 
-            new_object.setListaPonto([new_point]);
+            new_object.setListaPonto([points_unico]);
             widget.lista_objetos.add(new_object);
           } else {
             // CONTINUA OBJETO
 
-            Points new_point = new Points();
-
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
-            new_point.setOffset(points_unico);
 
             Object old_object =
                 widget.lista_objetos[widget.lista_objetos.length - 1];
             widget.lista_objetos.remove(old_object);
-            old_object.lista_de_pontos.add(new_point);
+            old_object.lista_de_pontos.add(points_unico);
             old_object.setType(widget.mode_text);
             widget.lista_objetos.add(old_object);
           }
@@ -120,51 +117,39 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               poligono_final.setType("Poligono");
               widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
               widget.lista_objetos.add(poligono_final);
-              widget.attListaObject(widget.lista_objetos);
+              // widget.attListaObject(widget.lista_objetos);
             } else {
               // Cria A SEQUENCIA DO POLIGONO
-              Points new_point = new Points();
 
               points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                   details.localPosition.dy.roundToDouble()));
-              new_point.setOffset(points_unico);
 
               Object old_object =
                   widget.lista_objetos[widget.lista_objetos.length - 1];
               widget.lista_objetos.remove(old_object);
 
-              old_object.lista_de_pontos.add(new_point);
+              old_object.lista_de_pontos.add(points_unico);
               old_object.setType("Reta_do_Poligono");
               widget.lista_objetos.add(old_object);
               // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
-              widget.attListaObject(widget.lista_objetos);
+              // widget.attListaObject(widget.lista_objetos);
             }
           } else {
             // #####
 
             // CRIA UM NOVO PONTO DO POLIGONO ZERADO.
-            Points new_point = new Points();
 
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
-            new_point.setOffset(points_unico);
 
             Object new_object = new Object();
 
-            new_object.setListaPonto([new_point]);
+            new_object.setListaPonto([points_unico]);
             widget.lista_objetos.add(new_object);
           }
         }
         widget.attListaObject(widget.lista_objetos);
       },
-      // onPanEnd: (details) {
-      //   int newID = ++widget.pixel_id;
-      //   widget.updatePixelID_gesture_detector(newID);
-      // },
-      // onTapUp: (details) {
-      //   // int newID = ++widget.pixel_id;
-      //   // widget.updatePixelID_gesture_detector(newID);
-      // },
     );
   }
 }

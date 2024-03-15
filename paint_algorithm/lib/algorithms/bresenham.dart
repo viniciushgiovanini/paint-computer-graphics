@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../class/Points.dart';
 
-List<Offset> paintBresenhamGeneric(Points ponto_inicial, Points ponto_final) {
+List<Offset> paintBresenhamGeneric(Offset ponto_inicial, Offset ponto_final) {
   List<Offset> objeto_resultdo_do_bresenham = [];
 
-  int x1 = ponto_inicial.ponto.dx.roundToDouble().toInt();
-  int y1 = ponto_inicial.ponto.dy.roundToDouble().toInt();
-  int x2 = ponto_final.ponto.dx.roundToDouble().toInt();
-  int y2 = ponto_final.ponto.dy.roundToDouble().toInt();
+  int x1 = ponto_inicial.dx.roundToDouble().toInt();
+  int y1 = ponto_inicial.dy.roundToDouble().toInt();
+  int x2 = ponto_final.dx.roundToDouble().toInt();
+  int y2 = ponto_final.dy.roundToDouble().toInt();
 
   int dx, dy, x, y, i, const1, const2, p, increx, increy;
 
