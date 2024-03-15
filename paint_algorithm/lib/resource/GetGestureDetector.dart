@@ -34,11 +34,9 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanStart: (details) {
-        Object newObject = new Object();
-        if (!newObject.isList(
-            widget.points_class,
-            Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
+        if (!widget.points_class.contains(Offset(
+            details.localPosition.dx.roundToDouble(),
+            details.localPosition.dy.roundToDouble()))) {
           if (widget.mode_text == "Painter") {
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));
@@ -51,11 +49,9 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         }
       },
       onPanUpdate: (details) {
-        Object newObject = new Object();
-        if (!newObject.isList(
-            widget.points_class,
-            Offset(details.localPosition.dx.roundToDouble(),
-                details.localPosition.dy.roundToDouble()))) {
+        if (!widget.points_class.contains(Offset(
+            details.localPosition.dx.roundToDouble(),
+            details.localPosition.dy.roundToDouble()))) {
           if (widget.mode_text == "Painter") {
             points_unico = (Offset(details.localPosition.dx.roundToDouble(),
                 details.localPosition.dy.roundToDouble()));

@@ -31,14 +31,4 @@ class Object {
     }
     return false;
   }
-
-  // verifica se o offset existe na lista de Points
-  bool isList(List<Offset> points_class, Offset value) {
-    for (var element in points_class) {
-      if (element == value) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
