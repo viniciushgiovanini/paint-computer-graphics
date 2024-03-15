@@ -143,9 +143,44 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             new_object.setListaPonto([points_unico]);
             widget.lista_objetos.add(new_object);
           }
+        } else if (widget.mode_text == "Translacao") {
+          points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+              details.localPosition.dy.roundToDouble()));
+          Object elemento_transladar =
+              widget.lista_objetos[widget.lista_objetos.length - 1];
+          widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
+
+          elemento_transladar.lista_de_pontos = transladarObjeto(
+              elemento_transladar.lista_de_pontos, points_unico);
+          widget.lista_objetos.add(elemento_transladar);
         }
         widget.attListaObject(widget.lista_objetos);
       },
     );
   }
+}
+
+List<Offset> transladarObjeto(
+    List<Offset> pontosObjeto, Offset novoPontoInicial) {
+  // Calcula o vetor de translação
+  Offset vetorTranslacao = Offset(
+    novoPontoInicial.dx - pontosObjeto[0].dx,
+    novoPontoInicial.dy - pontosObjeto[0].dy,
+  );
+
+  // Lista para armazenar os pontos transladados
+  List<Offset> pontosTransladados = [];
+
+  pontosTransladados.add(novoPontoInicial);
+
+  // Translada cada ponto do objeto
+  for (int i = 1; i < pontosObjeto.length; i++) {
+    Offset novoPonto = Offset(
+      pontosObjeto[i].dx + vetorTranslacao.dx,
+      pontosObjeto[i].dy + vetorTranslacao.dy,
+    );
+    pontosTransladados.add(novoPonto);
+  }
+
+  return pontosTransladados;
 }

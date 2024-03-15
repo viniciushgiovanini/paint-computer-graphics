@@ -75,8 +75,10 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
                   border: OutlineInputBorder()),
               onSubmitted: (value) {
                 try {
-                  widget.attListaObject(initAlgoritms(widget.mode_text,
-                      widget.lista_objetos, double.parse(value)));
+                  widget.attListaObject(transformacoesGeometricas(
+                      widget.mode_text,
+                      widget.lista_objetos,
+                      double.parse(value)));
                 } catch (w) {
                   // widget.updateAngle(0.0);
                   "".toString();
@@ -95,7 +97,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
   }
 }
 
-List<Object> initAlgoritms(
+List<Object> transformacoesGeometricas(
     String mode_text, List<Object> lista_objetos, double angle) {
   // ignore: unused_local_variable
   Object last_obj = lista_objetos[lista_objetos.length - 1];
