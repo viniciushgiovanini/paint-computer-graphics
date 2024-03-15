@@ -54,6 +54,8 @@ class Object {
 
       this.centralPoint =
           Offset(pontoCentralX.roundToDouble(), pontoCentralY.roundToDouble());
-    } else if (type == "Circunferencia") {}
+    } else if (type == "Circunferencia") {
+      this.centralPoint = lista_de_pontos[0];
+    }
   }
 }

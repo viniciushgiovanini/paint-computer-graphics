@@ -155,6 +155,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
 
           elemento_transladar.lista_de_pontos = transladarObjeto(
               elemento_transladar.lista_de_pontos, points_unico);
+          elemento_transladar.calculateCentralPoint();
           widget.lista_objetos.add(elemento_transladar);
         }
         widget.attListaObject(widget.lista_objetos);
