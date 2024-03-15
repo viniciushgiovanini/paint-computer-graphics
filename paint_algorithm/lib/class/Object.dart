@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Object {
   List<Offset> lista_de_pontos = [];
   String type = "Ponto";
+  Offset centralPoint = Offset(0.0, 0.0);
 
   void setType(String type) {
     this.type = type;
@@ -30,5 +31,29 @@ class Object {
       }
     }
     return false;
+  }
+
+  void calculateCentralPoint() {
+    if (type == "Reta") {
+      this.centralPoint = Offset(
+          ((this.lista_de_pontos[0].dx + this.lista_de_pontos[1].dx) / 2)
+              .roundToDouble(),
+          ((this.lista_de_pontos[0].dy + this.lista_de_pontos[1].dy) / 2)
+              .roundToDouble());
+    } else if (type == "Poligono") {
+      double somaX = 0;
+      double somaY = 0;
+
+      for (Offset vertice in this.lista_de_pontos) {
+        somaX += vertice.dx;
+        somaY += vertice.dy;
+      }
+
+      double pontoCentralX = somaX / this.lista_de_pontos.length;
+      double pontoCentralY = somaY / this.lista_de_pontos.length;
+
+      this.centralPoint =
+          Offset(pontoCentralX.roundToDouble(), pontoCentralY.roundToDouble());
+    } else if (type == "Circunferencia") {}
   }
 }

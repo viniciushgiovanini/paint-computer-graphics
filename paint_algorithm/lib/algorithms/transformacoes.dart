@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import '../class/Object.dart';
 
-Object rotacaoObject(Object obj, double angle, Offset center) {
+Object rotacaoObject(Object obj, double angle) {
   List<Offset> lista_de_pontos = List<Offset>.from(obj.lista_de_pontos);
 
+  Offset center = obj.centralPoint;
   obj.lista_de_pontos.clear();
 
   for (var each_points in lista_de_pontos) {
@@ -20,8 +21,7 @@ Object rotacaoObject(Object obj, double angle, Offset center) {
         (y - center.dy) * cos(radians) +
         center.dy;
 
-    obj.lista_de_pontos
-        .add(Offset(rotatedX.roundToDouble(), rotatedY.roundToDouble()));
+    obj.lista_de_pontos.add(Offset(rotatedX, rotatedY));
   }
 
   return obj;

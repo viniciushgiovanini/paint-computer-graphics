@@ -31,6 +31,8 @@ class VerticalBarScreen extends StatefulWidget {
 }
 
 class _VerticalBarScreenState extends State<VerticalBarScreen> {
+  FocusNode _focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,6 +71,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
             height: 40,
             child: TextField(
               textAlign: TextAlign.center,
+              focusNode: _focusNode,
               decoration: InputDecoration(
                   labelText: "Input",
                   // hintText: '90.0',
@@ -76,9 +79,11 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
               onSubmitted: (value) {
                 try {
                   widget.attListaObject(transformacoesGeometricas(
-                      widget.mode_text,
-                      widget.lista_objetos,
-                      double.parse(value)));
+                    widget.mode_text,
+                    widget.lista_objetos,
+                    double.parse(value),
+                  ));
+                  _focusNode.requestFocus();
                 } catch (w) {
                   print(w.toString());
                 }
@@ -104,8 +109,7 @@ List<Object> transformacoesGeometricas(
     Object last_obj = lista_objetos[lista_objetos.length - 1];
     lista_objetos.removeAt(lista_objetos.length - 1);
 
-    lista_objetos
-        .add(rotacaoObject(last_obj, value, last_obj.lista_de_pontos[0]));
+    lista_objetos.add(rotacaoObject(last_obj, value));
   } else if (mode_text == "Escala") {
     Object last_obj = lista_objetos[lista_objetos.length - 1];
     lista_objetos.removeAt(lista_objetos.length - 1);

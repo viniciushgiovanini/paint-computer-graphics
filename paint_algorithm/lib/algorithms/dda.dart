@@ -38,8 +38,9 @@ List<Offset> paintDDA(Offset ponto_inicial, Offset ponto_final) {
     lista_de_pontos_resultdo_do_dda
         .add(Offset(x.roundToDouble(), y.roundToDouble()));
   }
-
-  lista_de_pontos_resultdo_do_dda.add(ponto_final);
+  Offset ponto_final_arredondado =
+      Offset(ponto_final.dx.roundToDouble(), ponto_final.dy.roundToDouble());
+  lista_de_pontos_resultdo_do_dda.add(ponto_final_arredondado);
 
   return lista_de_pontos_resultdo_do_dda;
 }

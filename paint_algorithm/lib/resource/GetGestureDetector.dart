@@ -91,6 +91,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             widget.lista_objetos.remove(old_object);
             old_object.lista_de_pontos.add(points_unico);
             old_object.setType(widget.mode_text);
+            old_object.calculateCentralPoint();
             widget.lista_objetos.add(old_object);
           }
         } else if (widget.mode_text == "Poligono") {
@@ -112,6 +113,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
                   .lista_objetos[widget.lista_objetos.length - 1]
                   .lista_de_pontos);
               poligono_final.setType("Poligono");
+              poligono_final.calculateCentralPoint();
               widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
               widget.lista_objetos.add(poligono_final);
               // widget.attListaObject(widget.lista_objetos);
