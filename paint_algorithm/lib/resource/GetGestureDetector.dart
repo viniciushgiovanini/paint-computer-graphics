@@ -120,7 +120,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               poligono_final.setType("Poligono");
               widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
               widget.lista_objetos.add(poligono_final);
-              widget.attListaObject(widget.lista_objetos);
+              // widget.attListaObject(widget.lista_objetos);
             } else {
               // Cria A SEQUENCIA DO POLIGONO
               Points new_point = new Points();
@@ -137,7 +137,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               old_object.setType("Reta_do_Poligono");
               widget.lista_objetos.add(old_object);
               // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
-              widget.attListaObject(widget.lista_objetos);
+              // widget.attListaObject(widget.lista_objetos);
             }
           } else {
             // #####
@@ -157,14 +157,6 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         }
         widget.attListaObject(widget.lista_objetos);
       },
-      // onPanEnd: (details) {
-      //   int newID = ++widget.pixel_id;
-      //   widget.updatePixelID_gesture_detector(newID);
-      // },
-      // onTapUp: (details) {
-      //   // int newID = ++widget.pixel_id;
-      //   // widget.updatePixelID_gesture_detector(newID);
-      // },
     );
   }
 }

@@ -4,9 +4,11 @@ import '../class/Object.dart';
 import '../class/Points.dart';
 
 Object rotacaoObject(Object obj, double angle, Offset center) {
-  Object obj_rotacionado = new Object();
+  List<Points> lista_de_pontos = List<Points>.from(obj.lista_de_pontos);
 
-  for (var each_points in obj.lista_de_pontos) {
+  obj.lista_de_pontos.clear();
+
+  for (var each_points in lista_de_pontos) {
     double x = each_points.ponto.dx;
     double y = each_points.ponto.dy;
     double radians = angle * (pi / 180);
@@ -20,9 +22,10 @@ Object rotacaoObject(Object obj, double angle, Offset center) {
         center.dy;
 
     Points new_point = new Points();
-    new_point.setOffset(Offset(rotatedX, rotatedY));
-    obj_rotacionado.lista_de_pontos.add(new_point);
+    new_point
+        .setOffset(Offset(rotatedX.roundToDouble(), rotatedY.roundToDouble()));
+    obj.lista_de_pontos.add(new_point);
   }
 
-  return obj_rotacionado;
+  return obj;
 }

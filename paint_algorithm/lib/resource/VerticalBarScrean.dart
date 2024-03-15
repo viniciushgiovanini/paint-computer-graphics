@@ -6,16 +6,22 @@ import 'GetIcon.dart';
 import "PopupMenuButton.dart";
 import 'GetDialog.dart';
 
+// Algs imports
+import '../algorithms/rotacao.dart';
+import '../class/Object.dart';
+
 class VerticalBarScreen extends StatefulWidget {
   final List<Points> points_class;
   final List<Object> lista_objetos;
   final Function(String) updateMode;
   final Function(String) updateModeAlgoritmo;
-  final Function(double) updateAngle;
+  final Function(List<Object>) attListaObject;
+  final String mode_text;
 
   VerticalBarScreen(
       {super.key,
-      required this.updateAngle,
+      required this.mode_text,
+      required this.attListaObject,
       required this.lista_objetos,
       required this.points_class,
       required this.updateMode,
@@ -70,9 +76,12 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
                   border: OutlineInputBorder()),
               onSubmitted: (value) {
                 try {
-                  widget.updateAngle(double.parse(value));
+                  widget.attListaObject(initAlgoritms(widget.mode_text,
+                      widget.lista_objetos, double.parse(value)));
                 } catch (w) {
-                  widget.updateAngle(0.0);
+                  // widget.updateAngle(0.0);
+                  "".toString();
+                  print("DEU RUIM");
                 }
               },
             ),
@@ -85,4 +94,19 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
       ),
     );
   }
+}
+
+List<Object> initAlgoritms(
+    String mode_text, List<Object> lista_objetos, double angle) {
+  Object last_obj = lista_objetos[lista_objetos.length - 1];
+
+  if (mode_text == "Rotacao") {
+    Object last_obj = lista_objetos[lista_objetos.length - 1];
+    lista_objetos.removeAt(lista_objetos.length - 1);
+
+    lista_objetos
+        .add(rotacaoObject(last_obj, angle, last_obj.lista_de_pontos[0].ponto));
+  }
+
+  return lista_objetos;
 }

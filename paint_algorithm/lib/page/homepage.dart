@@ -24,7 +24,6 @@ class ViewerInteractive extends StatefulWidget {
   String mode_algoritmo;
   void Function(String) updateStringMode;
   void Function(String) updateModeAlgoritmo;
-  double angle = 180.0;
 
   ViewerInteractive(
       {super.key,
@@ -73,8 +72,12 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           ),
         )),
         VerticalBarScreen(
-          updateAngle: (p0) {
-            widget.angle = p0;
+          mode_text: widget.mode_text,
+          attListaObject: (p0) {
+            setState(() {
+              lista_objetos = p0;
+              "".toString();
+            });
           },
           lista_objetos: lista_objetos,
           updateModeAlgoritmo: (p0) {
@@ -110,7 +113,6 @@ class CanvaWidget extends StatefulWidget {
   final Function(List<Points>) updatePoints;
   final List<Object> lista_objetos;
   final String mode_algoritmo;
-
   final String mode_text;
 
   CanvaWidget({
@@ -222,7 +224,7 @@ void paintVerify(List<Object> lista_de_objetos, String mode_text,
     String mode_algoritmo, Canvas canvas, Paint paint) {
   lista_de_objetos.forEach((element) {
     if (element.type != "Ponto" && element.type != "Circunferencia") {
-      if (mode_text == "DDA") {
+      if (mode_algoritmo == "DDA") {
         paintRetas(mode_text, mode_algoritmo, canvas, paint, element, paintDDA);
       } else {
         paintRetas(mode_text, mode_algoritmo, canvas, paint, element,
