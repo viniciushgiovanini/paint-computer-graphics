@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // meus imports
 import "../class/Object.dart";
+import '../algorithms/transformacoes.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -158,29 +159,4 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
       },
     );
   }
-}
-
-List<Offset> transladarObjeto(
-    List<Offset> pontosObjeto, Offset novoPontoInicial) {
-  // Calcula o vetor de translação
-  Offset vetorTranslacao = Offset(
-    novoPontoInicial.dx - pontosObjeto[0].dx,
-    novoPontoInicial.dy - pontosObjeto[0].dy,
-  );
-
-  // Lista para armazenar os pontos transladados
-  List<Offset> pontosTransladados = [];
-
-  pontosTransladados.add(novoPontoInicial);
-
-  // Translada cada ponto do objeto
-  for (int i = 1; i < pontosObjeto.length; i++) {
-    Offset novoPonto = Offset(
-      pontosObjeto[i].dx + vetorTranslacao.dx,
-      pontosObjeto[i].dy + vetorTranslacao.dy,
-    );
-    pontosTransladados.add(novoPonto);
-  }
-
-  return pontosTransladados;
 }

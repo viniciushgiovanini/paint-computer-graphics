@@ -6,7 +6,7 @@ import "PopupMenuButton.dart";
 import 'GetDialog.dart';
 
 // Algs imports
-import '../algorithms/rotacao.dart';
+import '../algorithms/transformacoes.dart';
 import '../class/Object.dart';
 
 class VerticalBarScreen extends StatefulWidget {
@@ -70,8 +70,8 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
             child: TextField(
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                  labelText: "Ang",
-                  hintText: '90.0',
+                  labelText: "Input",
+                  // hintText: '90.0',
                   border: OutlineInputBorder()),
               onSubmitted: (value) {
                 try {
@@ -80,9 +80,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
                       widget.lista_objetos,
                       double.parse(value)));
                 } catch (w) {
-                  // widget.updateAngle(0.0);
-                  "".toString();
-                  print("DEU RUIM");
+                  print(w.toString());
                 }
               },
             ),
@@ -98,7 +96,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
 }
 
 List<Object> transformacoesGeometricas(
-    String mode_text, List<Object> lista_objetos, double angle) {
+    String mode_text, List<Object> lista_objetos, double value) {
   // ignore: unused_local_variable
   Object last_obj = lista_objetos[lista_objetos.length - 1];
 
@@ -107,7 +105,17 @@ List<Object> transformacoesGeometricas(
     lista_objetos.removeAt(lista_objetos.length - 1);
 
     lista_objetos
-        .add(rotacaoObject(last_obj, angle, last_obj.lista_de_pontos[0]));
+        .add(rotacaoObject(last_obj, value, last_obj.lista_de_pontos[0]));
+  } else if (mode_text == "Escala") {
+    Object last_obj = lista_objetos[lista_objetos.length - 1];
+    lista_objetos.removeAt(lista_objetos.length - 1);
+
+    // MUDAR O METODO AQUI
+
+    // last_obj.lista_de_pontos.clear();
+    last_obj.lista_de_pontos = escalarObjeto(last_obj.lista_de_pontos, value);
+
+    lista_objetos.add(last_obj);
   }
 
   return lista_objetos;
