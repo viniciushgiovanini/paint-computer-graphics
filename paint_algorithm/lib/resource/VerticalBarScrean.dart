@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paint_algorithm/class/Points.dart';
 
 // Imports meus
 import 'GetIcon.dart';
@@ -11,7 +10,7 @@ import '../algorithms/rotacao.dart';
 import '../class/Object.dart';
 
 class VerticalBarScreen extends StatefulWidget {
-  final List<Points> points_class;
+  final List<Offset> points_class;
   final List<Object> lista_objetos;
   final Function(String) updateMode;
   final Function(String) updateModeAlgoritmo;
@@ -98,6 +97,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
 
 List<Object> initAlgoritms(
     String mode_text, List<Object> lista_objetos, double angle) {
+  // ignore: unused_local_variable
   Object last_obj = lista_objetos[lista_objetos.length - 1];
 
   if (mode_text == "Rotacao") {
@@ -105,7 +105,7 @@ List<Object> initAlgoritms(
     lista_objetos.removeAt(lista_objetos.length - 1);
 
     lista_objetos
-        .add(rotacaoObject(last_obj, angle, last_obj.lista_de_pontos[0].ponto));
+        .add(rotacaoObject(last_obj, angle, last_obj.lista_de_pontos[0]));
   }
 
   return lista_objetos;

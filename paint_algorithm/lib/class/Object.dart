@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Points.dart';
 
 class Object {
-  List<Points> lista_de_pontos = [];
+  List<Offset> lista_de_pontos = [];
   String type = "Ponto";
 
   void setType(String type) {
@@ -13,20 +12,30 @@ class Object {
     return this.type;
   }
 
-  void setListaPonto(List<Points> lista_de_pontos) {
+  void setListaPonto(List<Offset> lista_de_pontos) {
     this.lista_de_pontos = lista_de_pontos;
   }
 
-  List<Points> getListaPonto() {
+  List<Offset> getListaPonto() {
     return this.lista_de_pontos;
   }
 
   bool verificarSeObjetoEPoligono(Object obj, Offset ponto_selecionado) {
-    List<Points> lista_de_pontos = [];
+    List<Offset> lista_de_pontos = [];
     lista_de_pontos.addAll(obj.lista_de_pontos);
 
     for (var element in lista_de_pontos) {
-      if (element.ponto == ponto_selecionado) {
+      if (element == ponto_selecionado) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // verifica se o offset existe na lista de Points
+  bool isList(List<Offset> points_class, Offset value) {
+    for (var element in points_class) {
+      if (element == value) {
         return true;
       }
     }

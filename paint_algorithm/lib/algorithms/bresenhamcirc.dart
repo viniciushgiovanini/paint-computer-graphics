@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import '../class/Points.dart';
 
-List<Offset> paintCirc(Points ponto_inicial, Points ponto_final) {
+List<Offset> paintCirc(Offset ponto_inicial, Offset ponto_final) {
   List<Offset> novo_objeto = [];
   int x, y;
   int p;
 
-  double distancia = (ponto_inicial.ponto - ponto_final.ponto).distance;
+  double distancia = (ponto_inicial - ponto_final).distance;
 
   int r = distancia.toInt();
 
-  int xc = ponto_inicial.ponto.dx.toInt();
-  int yc = ponto_inicial.ponto.dy.toInt();
+  int xc = ponto_inicial.dx.toInt();
+  int yc = ponto_inicial.dy.toInt();
 
   // INICIO DO ALGORITMO
 

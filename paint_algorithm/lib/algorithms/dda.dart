@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../class/Points.dart';
 
-List<Offset> paintDDA(Points ponto_inicial, Points ponto_final) {
+List<Offset> paintDDA(Offset ponto_inicial, Offset ponto_final) {
   List<Offset> lista_de_pontos_resultdo_do_dda = [];
 
-  double x1 = ponto_inicial.ponto.dx.roundToDouble();
-  double y1 = ponto_inicial.ponto.dy.roundToDouble();
-  double x2 = ponto_final.ponto.dx.roundToDouble();
-  double y2 = ponto_final.ponto.dy.roundToDouble();
+  double x1 = ponto_inicial.dx.roundToDouble();
+  double y1 = ponto_inicial.dy.roundToDouble();
+  double x2 = ponto_final.dx.roundToDouble();
+  double y2 = ponto_final.dy.roundToDouble();
   double x_incre, y_incre, x, y;
 
   double dx = x2 - x1;
@@ -40,7 +39,7 @@ List<Offset> paintDDA(Points ponto_inicial, Points ponto_final) {
         .add(Offset(x.roundToDouble(), y.roundToDouble()));
   }
 
-  lista_de_pontos_resultdo_do_dda.add(ponto_final.ponto);
+  lista_de_pontos_resultdo_do_dda.add(ponto_final);
 
   return lista_de_pontos_resultdo_do_dda;
 }

@@ -7,7 +7,6 @@ import "../resource/VerticalBarScrean.dart";
 import '../resource/GetGestureDetector.dart';
 
 // Classe
-import '../class/Points.dart';
 import '../class/Object.dart';
 
 // Algs
@@ -37,7 +36,7 @@ class ViewerInteractive extends StatefulWidget {
 }
 
 class _ViewerInteractiveState extends State<ViewerInteractive> {
-  List<Points> points_class = [];
+  List<Offset> points_class = [];
   final double width = 300;
   final double height = 300.5;
   List<Object> lista_objetos = [];
@@ -64,7 +63,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               height: height,
               mode_algoritmo: widget.mode_algoritmo,
               mode_text: widget.mode_text,
-              updatePoints: (updatedPoints) {
+              updateOffset: (updatedPoints) {
                 points_class.addAll(updatedPoints);
               },
               lista_objetos: lista_objetos,
@@ -106,11 +105,11 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
 
 // ignore: must_be_immutable
 class CanvaWidget extends StatefulWidget {
-  final List<Points> points_class;
+  final List<Offset> points_class;
   final Function(List<Object>) attListaObject;
   final double width;
   final double height;
-  final Function(List<Points>) updatePoints;
+  final Function(List<Offset>) updateOffset;
   final List<Object> lista_objetos;
   final String mode_algoritmo;
   final String mode_text;
@@ -122,7 +121,7 @@ class CanvaWidget extends StatefulWidget {
     required this.points_class,
     required this.width,
     required this.height,
-    required this.updatePoints,
+    required this.updateOffset,
     required this.mode_text,
     required this.mode_algoritmo,
   });
@@ -156,9 +155,9 @@ class _CanvaWidgetState extends State<CanvaWidget> {
             points_class: widget.points_class,
             mode_text: widget.mode_text,
             mode_algoritmo: widget.mode_algoritmo,
-            attPoints: (pontos_att) {
+            attOffset: (pontos_att) {
               setState(() {
-                widget.updatePoints(pontos_att);
+                widget.updateOffset(pontos_att);
               });
             },
             lista_objetos: widget.lista_objetos,
@@ -174,7 +173,7 @@ class _CanvaWidgetState extends State<CanvaWidget> {
 // #####################
 
 class Canva extends CustomPainter {
-  List<Points> points_class = [];
+  List<Offset> points_class = [];
   final List<Object> lista_de_objetos;
   String mode_algoritmo = "";
   String mode_text = "";
@@ -199,7 +198,7 @@ class Canva extends CustomPainter {
 
     if (points_class.length >= 1) {
       points_class.forEach((point) {
-        canvas.drawPoints(PointMode.points, [point.ponto], paint);
+        canvas.drawPoints(PointMode.points, [point], paint);
       });
     }
     if (lista_de_objetos.length >= 1) {
@@ -243,11 +242,9 @@ void paintVerify(List<Object> lista_de_objetos, String mode_text,
             Offset(
                 lista_de_objetos[lista_de_objetos.length - 1]
                     .lista_de_pontos[0]
-                    .ponto
                     .dx,
                 lista_de_objetos[lista_de_objetos.length - 1]
                     .lista_de_pontos[0]
-                    .ponto
                     .dy)
           ],
           paint);
@@ -264,16 +261,16 @@ void paintRetas(
   Function paintFunction,
 ) {
   for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
-    Points elemento_atual = element.lista_de_pontos[i];
-    Points elemento_prox = element.lista_de_pontos[i + 1];
+    Offset elemento_atual = element.lista_de_pontos[i];
+    Offset elemento_prox = element.lista_de_pontos[i + 1];
 
     canvas.drawPoints(
         PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
   }
   if (element.type == "Poligono") {
-    Points elemento_atual =
+    Offset elemento_atual =
         element.lista_de_pontos[element.lista_de_pontos.length - 1];
-    Points elemento_prox = element.lista_de_pontos[0];
+    Offset elemento_prox = element.lista_de_pontos[0];
     canvas.drawPoints(
         PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
   }
