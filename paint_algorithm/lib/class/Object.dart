@@ -4,6 +4,15 @@ class Object {
   List<Offset> lista_de_pontos = [];
   String type = "Ponto";
   Offset centralPoint = Offset(0.0, 0.0);
+  bool obj_recortado = false;
+
+  void setRecortado(bool obj_recortado) {
+    this.obj_recortado = obj_recortado;
+  }
+
+  bool getRecortado() {
+    return this.obj_recortado;
+  }
 
   void setType(String type) {
     this.type = type;

@@ -21,11 +21,15 @@ import '../algorithms/bresenhamcirc.dart';
 class ViewerInteractive extends StatefulWidget {
   String mode_text;
   String mode_algoritmo;
+  String mode_recorte;
   void Function(String) updateStringMode;
   void Function(String) updateModeAlgoritmo;
+  void Function(String) updateModeRecorte;
 
   ViewerInteractive(
       {super.key,
+      required this.updateModeRecorte,
+      required this.mode_recorte,
       required this.mode_text,
       required this.mode_algoritmo,
       required this.updateStringMode,
@@ -58,6 +62,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
                   lista_objetos = p0;
                 });
               },
+              mode_recorte: widget.mode_recorte,
               points_class: points_class,
               width: width,
               height: height,
@@ -71,6 +76,11 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           ),
         )),
         VerticalBarScreen(
+          updateModeRecorte: (p0) {
+            setState(() {
+              widget.updateModeRecorte(p0);
+            });
+          },
           mode_text: widget.mode_text,
           attListaObject: (p0) {
             setState(() {
@@ -93,7 +103,11 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               }
             }
 
-            if (!encontrado) {
+            if (!encontrado && widget.mode_text != "Recorte") {
+              widget.updateStringMode(txt_mode);
+            } else if (lista_objetos.length == 0 ||
+                (widget.mode_text == "Recorte" &&
+                    !lista_objetos.last.getRecortado())) {
               widget.updateStringMode(txt_mode);
             }
           },
@@ -113,9 +127,11 @@ class CanvaWidget extends StatefulWidget {
   final List<Object> lista_objetos;
   final String mode_algoritmo;
   final String mode_text;
+  final String mode_recorte;
 
   CanvaWidget({
     super.key,
+    required this.mode_recorte,
     required this.attListaObject,
     required this.lista_objetos,
     required this.points_class,
@@ -147,6 +163,7 @@ class _CanvaWidgetState extends State<CanvaWidget> {
             mode_text: widget.mode_text,
           ),
           child: GetGestureMouse(
+            mode_recorte: widget.mode_recorte,
             attListaObject: (p0) {
               setState(() {
                 widget.attListaObject(p0);
@@ -191,6 +208,10 @@ class Canva extends CustomPainter {
       ..color = const Color.fromARGB(255, 0, 0, 0)
       ..strokeWidth = 1.0;
 
+    final paintRectange = Paint()
+      ..color = Color.fromARGB(255, 2, 121, 27)
+      ..strokeWidth = 1.0;
+
     // Paint backgroundPaint = Paint()..color = Color.fromARGB(127, 243, 240, 211);
     Paint backgroundPaint = Paint()..color = Color.fromARGB(240, 255, 255, 255);
     canvas.drawRect(
@@ -202,7 +223,8 @@ class Canva extends CustomPainter {
       });
     }
     if (lista_de_objetos.length >= 1) {
-      paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
+      paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint,
+          paintRectange);
     }
   }
 
@@ -220,14 +242,25 @@ bool setTwoPoints(Object objeto) {
 }
 
 void paintVerify(List<Object> lista_de_objetos, String mode_text,
-    String mode_algoritmo, Canvas canvas, Paint paint) {
+    String mode_algoritmo, Canvas canvas, Paint paint, Paint paintRectange) {
   lista_de_objetos.forEach((element) {
     if (element.type != "Ponto" && element.type != "Circunferencia") {
       if (mode_algoritmo == "DDA") {
-        paintRetas(mode_text, mode_algoritmo, canvas, paint, element, paintDDA);
+        if (element.type == "Retangulo") {
+          paintRetas(mode_text, mode_algoritmo, canvas, paintRectange, element,
+              paintDDA);
+        } else {
+          paintRetas(
+              mode_text, mode_algoritmo, canvas, paint, element, paintDDA);
+        }
       } else {
-        paintRetas(mode_text, mode_algoritmo, canvas, paint, element,
-            paintBresenhamGeneric);
+        if (element.type == "Retangulo") {
+          paintRetas(mode_text, mode_algoritmo, canvas, paintRectange, element,
+              paintBresenhamGeneric);
+        } else {
+          paintRetas(mode_text, mode_algoritmo, canvas, paint, element,
+              paintBresenhamGeneric);
+        }
       }
     } else if (element.type == "Circunferencia") {
       canvas.drawPoints(
@@ -267,11 +300,11 @@ void paintRetas(
     canvas.drawPoints(
         PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
   }
-  if (element.type == "Poligono") {
-    Offset elemento_atual =
-        element.lista_de_pontos[element.lista_de_pontos.length - 1];
-    Offset elemento_prox = element.lista_de_pontos[0];
-    canvas.drawPoints(
-        PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
-  }
+  // if (element.type == "Poligono") {
+  //   Offset elemento_atual =
+  //       element.lista_de_pontos[element.lista_de_pontos.length - 1];
+  //   Offset elemento_prox = element.lista_de_pontos[0];
+  //   canvas.drawPoints(
+  //       PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
+  // }
 }

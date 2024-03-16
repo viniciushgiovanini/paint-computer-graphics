@@ -16,9 +16,11 @@ class VerticalBarScreen extends StatefulWidget {
   final Function(String) updateModeAlgoritmo;
   final Function(List<Object>) attListaObject;
   final String mode_text;
+  final Function(String) updateModeRecorte;
 
   VerticalBarScreen(
       {super.key,
+      required this.updateModeRecorte,
       required this.mode_text,
       required this.attListaObject,
       required this.lista_objetos,
@@ -46,6 +48,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
             getDialog(
               context,
               widget.updateModeAlgoritmo,
+              widget.updateModeRecorte,
             );
           }),
           getIcon(Icons.brush, 35.0, () {
@@ -59,6 +62,9 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           }),
           getIcon(Icons.circle_outlined, 35.0, () {
             widget.updateMode("Circunferencia");
+          }),
+          getIcon(Icons.cut, 35.0, () {
+            widget.updateMode("Recorte");
           }),
           getPopUpMenuButtom([
             PopupMenuItem(value: "Translacao", child: Text("Translacao")),
@@ -115,9 +121,6 @@ List<Object> transformacoesGeometricas(
     Object last_obj = lista_objetos[lista_objetos.length - 1];
     lista_objetos.removeAt(lista_objetos.length - 1);
 
-    // MUDAR O METODO AQUI
-
-    // last_obj.lista_de_pontos.clear();
     try {
       last_obj.lista_de_pontos =
           escalarObjeto(last_obj.lista_de_pontos, double.parse(value));
