@@ -11,14 +11,18 @@ import '../algorithms/liang_barski.dart';
 class GetGestureMouse extends StatefulWidget {
   final Function(List<Offset>) attOffset;
   final Function(List<Object>) attListaObject;
+  final void Function(dynamic) updateModeCutObj;
   final String mode_text;
   final String mode_algoritmo;
   final List<Offset> points_class;
   List<Object> lista_objetos;
   final String mode_recorte;
+  var cut_object;
 
   GetGestureMouse({
     super.key,
+    required this.updateModeCutObj,
+    required this.cut_object,
     required this.mode_recorte,
     required this.attListaObject,
     required this.lista_objetos,
@@ -73,7 +77,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
           retaCirc(
               widget.mode_text, widget.lista_objetos, points_unico, details);
         } else if (widget.mode_text == "Poligono") {
-          poligono(widget.lista_objetos, points_unico, details);
+          poligono(widget.lista_objetos, points_unico, details,
+              widget.cut_object, widget.updateModeCutObj);
         } else if (widget.mode_text == "Translacao") {
           translacao(widget.lista_objetos, points_unico, details);
         } else if (widget.mode_text == "Recorte") {
@@ -142,46 +147,13 @@ void retaCirc(String mode_text, List<Object> lista_objetos, Offset points_unico,
   }
 }
 
-void poligono(
-    List<Object> lista_objetos, Offset points_unico, TapDownDetails details) {
-  if (lista_objetos.length != 0 &&
-      (lista_objetos[lista_objetos.length - 1].type == "Reta_do_Poligono" ||
-          lista_objetos[lista_objetos.length - 1].type == "Ponto")) {
-    // Esse if implica que a lista tem que existe e o elemento não pode ser um poligono para continuar, assim tendo que ser um ponto
-    if (lista_objetos[0].verificarSeObjetoEPoligono(
-        lista_objetos[lista_objetos.length - 1],
-        Offset(details.localPosition.dx.roundToDouble(),
-            details.localPosition.dy.roundToDouble()))) {
-      // CONDICAO DE PARADA PARA DESCONECTAR O POLIGONO
+void poligono(List<Object> lista_objetos, Offset points_unico,
+    TapDownDetails details, var cut_object, Function updateCutObject) {
+  if (cut_object == null || lista_objetos.length == 0) {
+    // CONDICAO DE PARADA PARA DESCONECTAR O POLIGONO
 
-      Object poligono_final = new Object();
-
-      poligono_final.setListaPonto(
-          lista_objetos[lista_objetos.length - 1].lista_de_pontos);
-      poligono_final.setType("Poligono");
-      poligono_final.lista_de_pontos.add(poligono_final.lista_de_pontos.first);
-      poligono_final.calculateCentralPoint();
-      lista_objetos.removeAt(lista_objetos.length - 1);
-      lista_objetos.add(poligono_final);
-      // attListaObject(lista_objetos);
-    } else {
-      // Cria A SEQUENCIA DO POLIGONO
-
-      points_unico = (Offset(details.localPosition.dx.roundToDouble(),
-          details.localPosition.dy.roundToDouble()));
-
-      Object old_object = lista_objetos[lista_objetos.length - 1];
-      lista_objetos.remove(old_object);
-
-      old_object.lista_de_pontos.add(points_unico);
-      old_object.setType("Reta_do_Poligono");
-      lista_objetos.add(old_object);
-      // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
-      // attListaObject(lista_objetos);
-    }
-  } else {
-    // #####
-
+    cut_object = "rodando";
+    updateCutObject(cut_object);
     // CRIA UM NOVO PONTO DO POLIGONO ZERADO.
 
     points_unico = (Offset(details.localPosition.dx.roundToDouble(),
@@ -191,6 +163,22 @@ void poligono(
 
     new_object.setListaPonto([points_unico]);
     lista_objetos.add(new_object);
+    // attListaObject(lista_objetos);
+  } else {
+    // Cria A SEQUENCIA DO POLIGONO
+    cut_object = "rodando";
+    updateCutObject(cut_object);
+    points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+        details.localPosition.dy.roundToDouble()));
+
+    Object old_object = lista_objetos[lista_objetos.length - 1];
+    lista_objetos.remove(old_object);
+
+    old_object.lista_de_pontos.add(points_unico);
+    old_object.setType("Poligono");
+    lista_objetos.add(old_object);
+    // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
+    // attListaObject(lista_objetos);
   }
 }
 

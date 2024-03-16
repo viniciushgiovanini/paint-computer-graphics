@@ -44,6 +44,14 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
   final double width = 300;
   final double height = 300.5;
   List<Object> lista_objetos = [];
+  var cut_object = null;
+
+  void updateModeCutObj(dynamic value) {
+    setState(() {
+      cut_object = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -57,6 +65,8 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
             minScale: 0.1,
             maxScale: 60.0,
             child: CanvaWidget(
+              updateModeCutObj: updateModeCutObj,
+              cut_object: cut_object,
               attListaObject: (p0) {
                 setState(() {
                   lista_objetos = p0;
@@ -94,21 +104,24 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           },
           points_class: points_class,
           updateMode: (txt_mode) {
-            bool encontrado = false;
-
-            for (var objeto in lista_objetos) {
-              if (objeto.type == "Reta_do_Poligono") {
-                encontrado = true;
-                break;
-              }
-            }
-
-            if (!encontrado && widget.mode_text != "Recorte") {
+            if (widget.mode_text != "Recorte") {
               widget.updateStringMode(txt_mode);
             } else if (lista_objetos.length == 0 ||
                 (widget.mode_text == "Recorte" &&
                     !lista_objetos.last.getRecortado())) {
               widget.updateStringMode(txt_mode);
+            }
+
+            if (widget.mode_text == "Poligono" && lista_objetos.length != 0) {
+              setState(() {
+                cut_object = null;
+                Object last_polygon = lista_objetos.last;
+                lista_objetos.remove(last_polygon);
+
+                last_polygon.calculateCentralPoint();
+
+                lista_objetos.add(last_polygon);
+              });
             }
           },
         ),
@@ -128,9 +141,13 @@ class CanvaWidget extends StatefulWidget {
   final String mode_algoritmo;
   final String mode_text;
   final String mode_recorte;
+  final void Function(dynamic) updateModeCutObj;
+  var cut_object;
 
   CanvaWidget({
     super.key,
+    required this.updateModeCutObj,
+    required this.cut_object,
     required this.mode_recorte,
     required this.attListaObject,
     required this.lista_objetos,
@@ -163,6 +180,8 @@ class _CanvaWidgetState extends State<CanvaWidget> {
             mode_text: widget.mode_text,
           ),
           child: GetGestureMouse(
+            updateModeCutObj: widget.updateModeCutObj,
+            cut_object: widget.cut_object,
             mode_recorte: widget.mode_recorte,
             attListaObject: (p0) {
               setState(() {
@@ -293,12 +312,20 @@ void paintRetas(
   Object element,
   Function paintFunction,
 ) {
+  final elementoCentralPoligono = Paint()
+    ..color = Color.fromARGB(255, 255, 0, 0)
+    ..strokeWidth = 1.0;
+
   for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
     Offset elemento_atual = element.lista_de_pontos[i];
     Offset elemento_prox = element.lista_de_pontos[i + 1];
 
     canvas.drawPoints(
         PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
+  }
+  if (mode_text == "Poligono") {
+    canvas.drawPoints(
+        PointMode.points, [element.centralPoint], elementoCentralPoligono);
   }
   // if (element.type == "Poligono") {
   //   Offset elemento_atual =
