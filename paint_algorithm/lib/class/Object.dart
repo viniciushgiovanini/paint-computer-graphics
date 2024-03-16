@@ -4,6 +4,15 @@ class Object {
   List<Offset> lista_de_pontos = [];
   String type = "Ponto";
   Offset centralPoint = Offset(0.0, 0.0);
+  bool obj_recortado = false;
+
+  void setRecortado(bool obj_recortado) {
+    this.obj_recortado = obj_recortado;
+  }
+
+  bool getRecortado() {
+    return this.obj_recortado;
+  }
 
   void setType(String type) {
     this.type = type;
@@ -57,23 +66,5 @@ class Object {
     } else if (type == "Circunferencia") {
       this.centralPoint = lista_de_pontos[0];
     }
-  }
-
-  Object deepCopy() {
-    // Criar um novo objeto
-    Object copiedObject = Object();
-
-    // Copiar o tipo
-    copiedObject.type = this.type;
-
-    // Copiar o ponto central
-    copiedObject.centralPoint =
-        Offset(this.centralPoint.dx, this.centralPoint.dy);
-
-    // Copiar a lista de pontos
-    copiedObject.lista_de_pontos.addAll(
-        this.lista_de_pontos.map((point) => Offset(point.dx, point.dy)));
-
-    return copiedObject;
   }
 }

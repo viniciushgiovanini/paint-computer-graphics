@@ -5,6 +5,7 @@ import 'dart:math';
 import "../class/Object.dart";
 import '../algorithms/transformacoes.dart';
 import '../algorithms/cohen_sutherland.dart';
+import '../algorithms/liang_barski.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -80,13 +81,13 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
             recorte(
                 widget.lista_objetos, points_unico, details, cohenSutherland);
           } else if (widget.mode_recorte == "Liang-Barsky") {
-            recorte(
-                widget.lista_objetos, points_unico, details, cohenSutherland);
+            recorte(widget.lista_objetos, points_unico, details, liangBarsky);
           }
 
           // Gerando tabela
         }
         widget.attListaObject(widget.lista_objetos);
+        "".toString();
       },
     );
   }
@@ -235,6 +236,7 @@ void recorte(List<Object> lista_objetos, Offset points_unico,
         // Object new_object = each_object.deepCopy();
         Object new_reta = new Object();
         new_reta.setType("Reta");
+        new_reta.obj_recortado = true;
         if (each_object.type != "Circunferencia") {
           for (var i = 0; i < each_object.lista_de_pontos.length - 1; i++) {
             Offset startPoint = each_object.lista_de_pontos[i];
@@ -257,8 +259,11 @@ void recorte(List<Object> lista_objetos, Offset points_unico,
               new_reta.lista_de_pontos.add(startPoint);
             }
 
+            // new_reta.calculateCentralPoint();
             lista_objetos.add(new_reta);
             new_reta = new Object();
+            // new_reta.calculateCentralPoint();
+            new_reta.obj_recortado = true;
             new_reta.setType("Reta");
           }
 
@@ -273,7 +278,6 @@ void recorte(List<Object> lista_objetos, Offset points_unico,
       lista_objetos.insert(0, new_object_rectangle_cut);
       // chamar algs
     }
-    "".toString();
   } else {
     points_unico = (Offset(details.localPosition.dx.roundToDouble(),
         details.localPosition.dy.roundToDouble()));

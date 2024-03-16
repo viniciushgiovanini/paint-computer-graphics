@@ -103,7 +103,11 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               }
             }
 
-            if (!encontrado) {
+            if (!encontrado && widget.mode_text != "Recorte") {
+              widget.updateStringMode(txt_mode);
+            } else if (lista_objetos.length == 0 ||
+                (widget.mode_text == "Recorte" &&
+                    !lista_objetos.last.getRecortado())) {
               widget.updateStringMode(txt_mode);
             }
           },
