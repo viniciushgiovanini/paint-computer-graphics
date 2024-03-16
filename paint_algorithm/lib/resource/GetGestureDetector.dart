@@ -14,9 +14,11 @@ class GetGestureMouse extends StatefulWidget {
   final String mode_algoritmo;
   final List<Offset> points_class;
   List<Object> lista_objetos;
+  final String mode_recorte;
 
   GetGestureMouse({
     super.key,
+    required this.mode_recorte,
     required this.attListaObject,
     required this.lista_objetos,
     required this.points_class,
@@ -31,7 +33,6 @@ class GetGestureMouse extends StatefulWidget {
 
 class _GetGestureMouseState extends State<GetGestureMouse> {
   Offset points_unico = Offset(0.0, 0.0);
-  bool trava = false;
   final List<Offset> save_pontos_att = [];
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,13 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         } else if (widget.mode_text == "Translacao") {
           translacao(widget.lista_objetos, points_unico, details);
         } else if (widget.mode_text == "Recorte") {
-          recorte(widget.lista_objetos, points_unico, details);
+          if (widget.mode_recorte == "Cohen-Sutherland") {
+            recorte(
+                widget.lista_objetos, points_unico, details, cohenSutherland);
+          } else if (widget.mode_recorte == "Liang-Barsky") {
+            recorte(
+                widget.lista_objetos, points_unico, details, cohenSutherland);
+          }
 
           // Gerando tabela
         }
@@ -199,8 +206,8 @@ void translacao(
   lista_objetos.add(elemento_transladar);
 }
 
-void recorte(
-    List<Object> lista_objetos, Offset points_unico, TapDownDetails details) {
+void recorte(List<Object> lista_objetos, Offset points_unico,
+    TapDownDetails details, Function recorteFunc) {
   points_unico = (Offset(details.localPosition.dx.roundToDouble(),
       details.localPosition.dy.roundToDouble()));
 
@@ -235,12 +242,12 @@ void recorte(
             // Lista temporária para armazenar os novos pontos
             List<Offset> resp = [];
             // Chamada da função para calcular os novos pontos
-            cohenSutherland(
+            recorteFunc(
               startPoint,
               endPoint,
               new_object_rectangle_cut,
               resp,
-              0, // O índice pode ser qualquer valor, pois estamos atualizando a lista de pontos diretamente
+              0,
             );
 
             // Adicionar os novos pontos à lista temporária

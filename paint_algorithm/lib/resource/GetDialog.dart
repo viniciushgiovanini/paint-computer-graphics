@@ -57,13 +57,13 @@ class meuDialogWidgetRecorte extends StatefulWidget {
   final List<String> listText;
   final List<String> descricao;
   final String title;
-  final Function(String) updateModeAlg;
+  final Function(String) updateModeRecorte;
   meuDialogWidgetRecorte(
       {super.key,
       required this.listText,
       required this.descricao,
       required this.title,
-      required this.updateModeAlg});
+      required this.updateModeRecorte});
 
   @override
   State<meuDialogWidgetRecorte> createState() => _meuDialogWidgetStateRecorte();
@@ -83,7 +83,7 @@ class _meuDialogWidgetStateRecorte extends State<meuDialogWidgetRecorte> {
             setState(() {
               if (p0 == widget.listText[0]) {
                 groupValueRecorte = 0;
-                widget.updateModeAlg(widget.listText[0]);
+                widget.updateModeRecorte(widget.listText[0]);
               }
             });
           }, widget.listText, widget.descricao[0]),
@@ -91,7 +91,7 @@ class _meuDialogWidgetStateRecorte extends State<meuDialogWidgetRecorte> {
             setState(() {
               if (p0 == widget.listText[1]) {
                 groupValueRecorte = 1;
-                widget.updateModeAlg(widget.listText[1]);
+                widget.updateModeRecorte(widget.listText[1]);
               }
             });
           }, widget.listText, widget.descricao[1]),
@@ -102,7 +102,9 @@ class _meuDialogWidgetStateRecorte extends State<meuDialogWidgetRecorte> {
 }
 
 Future<void> getDialog(
-    BuildContext context, final Function(String) updateModeAlg) {
+    BuildContext context,
+    final Function(String) updateModeAlg,
+    final Function(String) updateModeRecorte) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -129,7 +131,7 @@ Future<void> getDialog(
                   "Algoritmo da equação paramétrica de recortes Liang-Barsky"
                 ],
                 title: "Algoritmo de Recortes",
-                updateModeAlg: updateModeAlg,
+                updateModeRecorte: updateModeRecorte,
               ),
               Divider()
             ],

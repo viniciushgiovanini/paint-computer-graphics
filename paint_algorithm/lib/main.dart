@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 class MyHomePage extends State<Home> {
   String mode_text = "Painter";
   String mode_algoritmo = "DDA";
+  String mode_recorte = "Cohen-Sutherland";
 
   @override
   @override
@@ -65,6 +66,12 @@ class MyHomePage extends State<Home> {
           body: Container(
             decoration: BoxDecoration(color: Colors.blueGrey[900]),
             child: ViewerInteractive(
+              updateModeRecorte: (p0) {
+                setState(() {
+                  mode_recorte = p0;
+                });
+              },
+              mode_recorte: mode_recorte,
               mode_algoritmo: mode_algoritmo,
               mode_text: mode_text,
               updateModeAlgoritmo: (details) {
