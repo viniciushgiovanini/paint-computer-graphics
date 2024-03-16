@@ -312,10 +312,6 @@ void paintRetas(
   Object element,
   Function paintFunction,
 ) {
-  final elementoCentralPoligono = Paint()
-    ..color = Color.fromARGB(255, 255, 0, 0)
-    ..strokeWidth = 1.0;
-
   for (int i = 0; i < element.lista_de_pontos.length - 1; i++) {
     Offset elemento_atual = element.lista_de_pontos[i];
     Offset elemento_prox = element.lista_de_pontos[i + 1];
@@ -323,15 +319,10 @@ void paintRetas(
     canvas.drawPoints(
         PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
   }
-  if (mode_text == "Poligono") {
-    canvas.drawPoints(
-        PointMode.points, [element.centralPoint], elementoCentralPoligono);
-  }
-  // if (element.type == "Poligono") {
-  //   Offset elemento_atual =
-  //       element.lista_de_pontos[element.lista_de_pontos.length - 1];
-  //   Offset elemento_prox = element.lista_de_pontos[0];
-  //   canvas.drawPoints(
-  //       PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
-  // }
+
+  // final elementoCentralPoligono = Paint()
+  //   ..color = Color.fromARGB(255, 255, 0, 0)
+  //   ..strokeWidth = 1.0;
+  // canvas.drawPoints(
+  //     PointMode.points, [element.centralPoint], elementoCentralPoligono);
 }
