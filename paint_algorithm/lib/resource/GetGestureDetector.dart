@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 // meus imports
 import "../class/Object.dart";
 import '../algorithms/transformacoes.dart';
+import '../algorithms/cohen_sutherland.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -113,6 +115,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
                   .lista_objetos[widget.lista_objetos.length - 1]
                   .lista_de_pontos);
               poligono_final.setType("Poligono");
+              poligono_final.lista_de_pontos
+                  .add(poligono_final.lista_de_pontos.first);
               poligono_final.calculateCentralPoint();
               widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
               widget.lista_objetos.add(poligono_final);
@@ -157,9 +161,109 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
               elemento_transladar.lista_de_pontos, points_unico);
           elemento_transladar.calculateCentralPoint();
           widget.lista_objetos.add(elemento_transladar);
+        } else if (widget.mode_text == "Recorte") {
+          points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+              details.localPosition.dy.roundToDouble()));
+
+          if (widget.lista_objetos.length > 0 &&
+              widget.lista_objetos[widget.lista_objetos.length - 1].type ==
+                  "Ponto") {
+            Object new_object_rectangle_cut = new Object();
+
+            new_object_rectangle_cut.lista_de_pontos = generateRectanglePoints(
+                widget.lista_objetos[widget.lista_objetos.length - 1]
+                    .lista_de_pontos[0],
+                points_unico);
+            new_object_rectangle_cut.setType("Retangulo");
+            widget.lista_objetos.removeAt(widget.lista_objetos.length - 1);
+            if ((new_object_rectangle_cut.lista_de_pontos[0].dx ==
+                    new_object_rectangle_cut
+                        .lista_de_pontos[
+                            new_object_rectangle_cut.lista_de_pontos.length - 1]
+                        .dx) &&
+                new_object_rectangle_cut.lista_de_pontos[0].dx <
+                    new_object_rectangle_cut.lista_de_pontos[1].dx &&
+                new_object_rectangle_cut.lista_de_pontos[0].dy ==
+                    new_object_rectangle_cut.lista_de_pontos[1].dy) {
+              List<Object> lista_loop_object =
+                  List<Object>.from(widget.lista_objetos);
+
+              lista_loop_object.forEach((each_object) {
+                // Object new_object = each_object.deepCopy();
+                Object new_reta = new Object();
+                new_reta.setType("Reta");
+                if (each_object.type != "Circunferencia") {
+                  for (var i = 0;
+                      i < each_object.lista_de_pontos.length - 1;
+                      i++) {
+                    Offset startPoint = each_object.lista_de_pontos[i];
+                    Offset endPoint = each_object.lista_de_pontos[i + 1];
+                    // Lista temporária para armazenar os novos pontos
+                    List<Offset> resp = [];
+                    // Chamada da função para calcular os novos pontos
+                    cohenSutherland(
+                      startPoint,
+                      endPoint,
+                      new_object_rectangle_cut,
+                      resp,
+                      0, // O índice pode ser qualquer valor, pois estamos atualizando a lista de pontos diretamente
+                    );
+
+                    // Adicionar os novos pontos à lista temporária
+                    if (resp.isNotEmpty) {
+                      new_reta.lista_de_pontos.addAll(resp);
+                    } else {
+                      new_reta.lista_de_pontos.add(startPoint);
+                    }
+
+                    widget.lista_objetos.add(new_reta);
+                    new_reta = new Object();
+                    new_reta.setType("Reta");
+                  }
+
+                  // Definir a lista de pontos atualizada no novo objeto
+                  // new_object.setListaPonto(novosPontos);
+
+                  // Remover o objeto original e adicionar o novo objeto à lista
+                  widget.lista_objetos.remove(each_object);
+                  // widget.lista_objetos.add(new_object);
+                }
+              });
+              widget.lista_objetos.insert(0, new_object_rectangle_cut);
+              // chamar algs
+            }
+            "".toString();
+          } else {
+            points_unico = (Offset(details.localPosition.dx.roundToDouble(),
+                details.localPosition.dy.roundToDouble()));
+
+            Object new_object = new Object();
+
+            new_object.setListaPonto([points_unico]);
+            widget.lista_objetos.add(new_object);
+          }
+
+          // Gerando tabela
         }
         widget.attListaObject(widget.lista_objetos);
       },
     );
   }
+}
+
+List<Offset> generateRectanglePoints(Offset point1, Offset point2) {
+  double minX = min(point1.dx, point2.dx);
+  double minY = min(point1.dy, point2.dy);
+  double maxX = max(point1.dx, point2.dx);
+  double maxY = max(point1.dy, point2.dy);
+
+  // Mantém os pontos da diagonal principal fixos
+  Offset topLeft = point1;
+  Offset bottomRight = point2;
+
+  // Calcula os outros dois pontos da diagonal secundária
+  Offset topRight = Offset(maxX, minY);
+  Offset bottomLeft = Offset(minX, maxY);
+
+  return [topLeft, topRight, bottomRight, bottomLeft, point1];
 }

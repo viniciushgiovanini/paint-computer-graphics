@@ -58,4 +58,22 @@ class Object {
       this.centralPoint = lista_de_pontos[0];
     }
   }
+
+  Object deepCopy() {
+    // Criar um novo objeto
+    Object copiedObject = Object();
+
+    // Copiar o tipo
+    copiedObject.type = this.type;
+
+    // Copiar o ponto central
+    copiedObject.centralPoint =
+        Offset(this.centralPoint.dx, this.centralPoint.dy);
+
+    // Copiar a lista de pontos
+    copiedObject.lista_de_pontos.addAll(
+        this.lista_de_pontos.map((point) => Offset(point.dx, point.dy)));
+
+    return copiedObject;
+  }
 }

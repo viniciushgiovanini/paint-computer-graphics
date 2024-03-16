@@ -191,6 +191,10 @@ class Canva extends CustomPainter {
       ..color = const Color.fromARGB(255, 0, 0, 0)
       ..strokeWidth = 1.0;
 
+    final paintRectange = Paint()
+      ..color = Color.fromARGB(255, 2, 121, 27)
+      ..strokeWidth = 1.0;
+
     // Paint backgroundPaint = Paint()..color = Color.fromARGB(127, 243, 240, 211);
     Paint backgroundPaint = Paint()..color = Color.fromARGB(240, 255, 255, 255);
     canvas.drawRect(
@@ -202,7 +206,8 @@ class Canva extends CustomPainter {
       });
     }
     if (lista_de_objetos.length >= 1) {
-      paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint);
+      paintVerify(lista_de_objetos, mode_text, mode_algoritmo, canvas, paint,
+          paintRectange);
     }
   }
 
@@ -220,14 +225,25 @@ bool setTwoPoints(Object objeto) {
 }
 
 void paintVerify(List<Object> lista_de_objetos, String mode_text,
-    String mode_algoritmo, Canvas canvas, Paint paint) {
+    String mode_algoritmo, Canvas canvas, Paint paint, Paint paintRectange) {
   lista_de_objetos.forEach((element) {
     if (element.type != "Ponto" && element.type != "Circunferencia") {
       if (mode_algoritmo == "DDA") {
-        paintRetas(mode_text, mode_algoritmo, canvas, paint, element, paintDDA);
+        if (element.type == "Retangulo") {
+          paintRetas(mode_text, mode_algoritmo, canvas, paintRectange, element,
+              paintDDA);
+        } else {
+          paintRetas(
+              mode_text, mode_algoritmo, canvas, paint, element, paintDDA);
+        }
       } else {
-        paintRetas(mode_text, mode_algoritmo, canvas, paint, element,
-            paintBresenhamGeneric);
+        if (element.type == "Retangulo") {
+          paintRetas(mode_text, mode_algoritmo, canvas, paintRectange, element,
+              paintBresenhamGeneric);
+        } else {
+          paintRetas(mode_text, mode_algoritmo, canvas, paint, element,
+              paintBresenhamGeneric);
+        }
       }
     } else if (element.type == "Circunferencia") {
       canvas.drawPoints(
@@ -267,11 +283,11 @@ void paintRetas(
     canvas.drawPoints(
         PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
   }
-  if (element.type == "Poligono") {
-    Offset elemento_atual =
-        element.lista_de_pontos[element.lista_de_pontos.length - 1];
-    Offset elemento_prox = element.lista_de_pontos[0];
-    canvas.drawPoints(
-        PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
-  }
+  // if (element.type == "Poligono") {
+  //   Offset elemento_atual =
+  //       element.lista_de_pontos[element.lista_de_pontos.length - 1];
+  //   Offset elemento_prox = element.lista_de_pontos[0];
+  //   canvas.drawPoints(
+  //       PointMode.points, paintFunction(elemento_atual, elemento_prox), paint);
+  // }
 }
