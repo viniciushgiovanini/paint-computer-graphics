@@ -195,6 +195,10 @@ void recorte(
       lista_objetos[lista_objetos.length - 1].type == "Ponto") {
     Object new_object_rectangle_cut = new Object();
 
+    if (lista_objetos[0].type == "Retangulo") {
+      lista_objetos.removeAt(0);
+    }
+
     new_object_rectangle_cut.lista_de_pontos = generateRectanglePoints(
         lista_objetos[lista_objetos.length - 1].lista_de_pontos[0],
         points_unico);
