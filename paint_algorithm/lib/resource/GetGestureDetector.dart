@@ -4,8 +4,6 @@ import 'dart:math';
 // meus imports
 import "../class/Object.dart";
 import '../algorithms/transformacoes.dart';
-import '../algorithms/cohen_sutherland.dart';
-import '../algorithms/liang_barski.dart';
 
 // ignore: must_be_immutable
 class GetGestureMouse extends StatefulWidget {
@@ -82,14 +80,7 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
         } else if (widget.mode_text == "Translacao") {
           translacao(widget.lista_objetos, points_unico, details);
         } else if (widget.mode_text == "Recorte") {
-          if (widget.mode_recorte == "Cohen-Sutherland") {
-            recorte(
-                widget.lista_objetos, points_unico, details, cohenSutherland);
-          } else if (widget.mode_recorte == "Liang-Barsky") {
-            recorte(widget.lista_objetos, points_unico, details, liangBarsky);
-          }
-
-          // Gerando tabela
+          recorte(widget.lista_objetos, points_unico, details);
         }
         widget.attListaObject(widget.lista_objetos);
         "".toString();
@@ -195,8 +186,8 @@ void translacao(
   lista_objetos.add(elemento_transladar);
 }
 
-void recorte(List<Object> lista_objetos, Offset points_unico,
-    TapDownDetails details, Function recorteFunc) {
+void recorte(
+    List<Object> lista_objetos, Offset points_unico, TapDownDetails details) {
   points_unico = (Offset(details.localPosition.dx.roundToDouble(),
       details.localPosition.dy.roundToDouble()));
 
@@ -207,8 +198,7 @@ void recorte(List<Object> lista_objetos, Offset points_unico,
     new_object_rectangle_cut.lista_de_pontos = generateRectanglePoints(
         lista_objetos[lista_objetos.length - 1].lista_de_pontos[0],
         points_unico);
-    new_object_rectangle_cut.setType("Retangulo");
-    lista_objetos.removeAt(lista_objetos.length - 1);
+
     if ((new_object_rectangle_cut.lista_de_pontos[0].dx ==
             new_object_rectangle_cut
                 .lista_de_pontos[
@@ -218,53 +208,11 @@ void recorte(List<Object> lista_objetos, Offset points_unico,
             new_object_rectangle_cut.lista_de_pontos[1].dx &&
         new_object_rectangle_cut.lista_de_pontos[0].dy ==
             new_object_rectangle_cut.lista_de_pontos[1].dy) {
-      List<Object> lista_loop_object = List<Object>.from(lista_objetos);
-
-      lista_loop_object.forEach((each_object) {
-        // Object new_object = each_object.deepCopy();
-        Object new_reta = new Object();
-        new_reta.setType("Reta");
-        new_reta.obj_recortado = true;
-        if (each_object.type != "Circunferencia") {
-          for (var i = 0; i < each_object.lista_de_pontos.length - 1; i++) {
-            Offset startPoint = each_object.lista_de_pontos[i];
-            Offset endPoint = each_object.lista_de_pontos[i + 1];
-            // Lista temporária para armazenar os novos pontos
-            List<Offset> resp = [];
-            // Chamada da função para calcular os novos pontos
-            recorteFunc(
-              startPoint,
-              endPoint,
-              new_object_rectangle_cut,
-              resp,
-              0,
-            );
-
-            // Adicionar os novos pontos à lista temporária
-            if (resp.isNotEmpty) {
-              new_reta.lista_de_pontos.addAll(resp);
-            } else {
-              new_reta.lista_de_pontos.add(startPoint);
-            }
-
-            // new_reta.calculateCentralPoint();
-            lista_objetos.add(new_reta);
-            new_reta = new Object();
-            // new_reta.calculateCentralPoint();
-            new_reta.obj_recortado = true;
-            new_reta.setType("Reta");
-          }
-
-          // Definir a lista de pontos atualizada no novo objeto
-          // new_object.setListaPonto(novosPontos);
-
-          // Remover o objeto original e adicionar o novo objeto à lista
-          lista_objetos.remove(each_object);
-          // lista_objetos.add(new_object);
-        }
-      });
+      new_object_rectangle_cut.setType("Retangulo");
+      lista_objetos.removeAt(lista_objetos.length - 1);
       lista_objetos.insert(0, new_object_rectangle_cut);
-      // chamar algs
+    } else {
+      lista_objetos.removeLast();
     }
   } else {
     points_unico = (Offset(details.localPosition.dx.roundToDouble(),
