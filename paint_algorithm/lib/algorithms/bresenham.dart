@@ -27,8 +27,6 @@ List<Offset> paintBresenhamGeneric(Offset ponto_inicial, Offset ponto_final) {
   x = x1;
   y = y1;
 
-  // points.clear();
-  // points.add(Offset(x.roundToDouble(), y.roundToDouble()));
   objeto_resultdo_do_bresenham
       .add(Offset(x.roundToDouble(), y.roundToDouble()));
   ;
@@ -47,7 +45,6 @@ List<Offset> paintBresenhamGeneric(Offset ponto_inicial, Offset ponto_final) {
       }
       objeto_resultdo_do_bresenham
           .add(Offset(x.roundToDouble(), y.roundToDouble()));
-      // points.add(Offset(x.roundToDouble(), y.roundToDouble()));
     }
   } else {
     p = 2 * dx - dy;
@@ -63,7 +60,6 @@ List<Offset> paintBresenhamGeneric(Offset ponto_inicial, Offset ponto_final) {
       }
       objeto_resultdo_do_bresenham
           .add(Offset(x.roundToDouble(), y.roundToDouble()));
-      // points.add(Offset(x.roundToDouble(), y.roundToDouble()));
     }
   }
 

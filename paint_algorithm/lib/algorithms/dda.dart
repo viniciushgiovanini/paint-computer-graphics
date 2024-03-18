@@ -12,8 +12,6 @@ List<Offset> paintDDA(Offset ponto_inicial, Offset ponto_final) {
   double dx = x2 - x1;
   double dy = y2 - y1;
 
-  // points.clear();
-
   int passos;
 
   if (dx.abs() > dy.abs()) {

@@ -9,6 +9,7 @@ import 'GetDialog.dart';
 import '../algorithms/transformacoes.dart';
 import '../class/Object.dart';
 
+// Barralateral que atualiza os modos e recebe os inputs.
 class VerticalBarScreen extends StatefulWidget {
   final List<Offset> points_class;
   final List<Object> lista_objetos;
@@ -45,6 +46,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
+        // Icones que atualiza o modo do algoritmo
         children: [
           getIcon(Icons.settings, 35.0, () {
             getDialog(
@@ -111,6 +113,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
   }
 }
 
+// Metodo para gerenciar os inputs em relacao ao modo atual.
 List<Object> transformacoesGeometricas(
     String mode_text, List<Object> lista_objetos, String value) {
   // ignore: unused_local_variable

@@ -14,14 +14,17 @@ class Home extends StatefulWidget {
   State<Home> createState() => MyHomePage();
 }
 
+// Widget principal, faz a chamada do appbar (cabeçalho) e o container que tem a barra lateral e o canvas chamado Viewer
 class MyHomePage extends State<Home> {
   String mode_text = "Painter";
+  // Variaveis que setam o modo dos algoritmos de reta e recorte
   String mode_algoritmo = "DDA";
   String mode_recorte = "Cohen-Sutherland";
 
   @override
   @override
   Widget build(BuildContext context) {
+    // Widget: Cabecalho
     return MaterialApp(
       home: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -63,8 +66,10 @@ class MyHomePage extends State<Home> {
             ),
             backgroundColor: Color.fromARGB(255, 103, 233, 125),
           ),
+          // Widget: Canvas e barra vertica
           body: Container(
             decoration: BoxDecoration(color: Colors.blueGrey[900]),
+            // Chamada do canvas e da barra lateral
             child: ViewerInteractive(
               updateModeRecorte: (p0) {
                 setState(() {

@@ -34,12 +34,14 @@ class GetGestureMouse extends StatefulWidget {
   State<GetGestureMouse> createState() => _GetGestureMouseState();
 }
 
+// Widget que recebe os inputs dos gestos.
 class _GetGestureMouseState extends State<GetGestureMouse> {
   Offset points_unico = Offset(0.0, 0.0);
   final List<Offset> save_pontos_att = [];
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // Gestos de iniciar o arrasto do mouse
       onPanStart: (details) {
         if (!widget.points_class.contains(Offset(
             details.localPosition.dx.roundToDouble(),
@@ -55,6 +57,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
           }
         }
       },
+      // Gesto que atualizando quando o mouse1 esta clicado e arrastando, colocando todos
+      // os offets em uma lista para mandar para o custom painter
       onPanUpdate: (details) {
         if (!widget.points_class.contains(Offset(
             details.localPosition.dx.roundToDouble(),
@@ -69,6 +73,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
           }
         }
       },
+      // Gesto referente ao clique do mouse, que manda o input de maneiras diferentes para
+      // a lista de objetos
       onTapDown: (details) {
         if (widget.mode_text == "Reta" ||
             widget.mode_text == "Circunferencia") {
@@ -89,6 +95,8 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
   }
 }
 
+// Metodo que gera as coordenadas dos pontos extremos da diagonal secundario, pois
+// tem que ser passado a diagonal principal
 List<Offset> generateRectanglePoints(Offset point1, Offset point2) {
   double minX = min(point1.dx, point2.dx);
   double minY = min(point1.dy, point2.dy);
@@ -109,7 +117,8 @@ List<Offset> generateRectanglePoints(Offset point1, Offset point2) {
 // #########################
 //     FUNCOES DO ONTAP
 // #########################
-
+// Recebe o primeiro input e adiciona um objeto ponto, e quando recebe
+//o outro input transforma em um objetos circunferencia.
 void retaCirc(String mode_text, List<Object> lista_objetos, Offset points_unico,
     TapDownDetails details) {
   if (lista_objetos.length == 0 ||
@@ -138,6 +147,8 @@ void retaCirc(String mode_text, List<Object> lista_objetos, Offset points_unico,
   }
 }
 
+// Gerencia a ferramenta de poligono, fazendo um conjunto de retas ligadas, e quando voce
+// clica em outra ferramenta ele fecha o objeto desenhado
 void poligono(List<Object> lista_objetos, Offset points_unico,
     TapDownDetails details, var cut_object, Function updateCutObject) {
   if (cut_object == null || lista_objetos.length == 0) {
@@ -169,10 +180,13 @@ void poligono(List<Object> lista_objetos, Offset points_unico,
     old_object.setType("Poligono");
     lista_objetos.add(old_object);
     // Atualiza lista de objetos com um novo objeto com um unico PONTO dentro.
-    // attListaObject(lista_objetos);
   }
 }
 
+// ########################
+// #      Translacao      #
+// ########################
+// Metodo que realiza a translação, no ponto inicial do objeto
 void translacao(
     List<Object> lista_objetos, Offset points_unico, TapDownDetails details) {
   points_unico = (Offset(details.localPosition.dx.roundToDouble(),
@@ -186,6 +200,8 @@ void translacao(
   lista_objetos.add(elemento_transladar);
 }
 
+// Metodo que recebe a lista de objetos que gera o retangulo, adiciondo sempre na primeira posicao
+// dos objetos, caso tenha um retangulo já ele faz o update.
 void recorte(
     List<Object> lista_objetos, Offset points_unico, TapDownDetails details) {
   points_unico = (Offset(details.localPosition.dx.roundToDouble(),

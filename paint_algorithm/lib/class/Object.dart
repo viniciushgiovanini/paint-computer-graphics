@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+// A classe objeto tem uma lista de offset
+// tem o tipo, podendo ser ponto, reta, poligono ou circunferencia
+// toda vez que um objeto é criado sem ponto central é atualizado, isso ocorre
+// para ja ter esse ponto nas operações de movimento do objeto.
 class Object {
   List<Offset> lista_de_pontos = [];
   String type = "Ponto";
@@ -21,6 +25,7 @@ class Object {
     return this.lista_de_pontos;
   }
 
+  // Verifica se o objeto poligono esta fechado
   bool verificarSeObjetoEPoligono(Object obj, Offset ponto_selecionado) {
     List<Offset> lista_de_pontos = [];
     lista_de_pontos.addAll(obj.lista_de_pontos);
@@ -33,6 +38,7 @@ class Object {
     return false;
   }
 
+  // Metodo que recebe um objeto, e dependedo do tipo ele calcula o ponto central
   void calculateCentralPoint() {
     if (type == "Reta") {
       this.centralPoint = Offset(
@@ -59,6 +65,7 @@ class Object {
     }
   }
 
+  // Metodo de clonar objeto
   Object clone() {
     final clonedObject = Object();
     clonedObject.lista_de_pontos.addAll(lista_de_pontos);
