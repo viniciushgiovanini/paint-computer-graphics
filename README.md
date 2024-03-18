@@ -41,7 +41,7 @@ paint_algorithm/lib/*.
 paint_algorithm/lib/algorithms/*.
 ```
 
-## Arquivo Executavel (Build para Windows)
+## Arquivo Executável (Build para Windows)
 O executável está nas releases do github mas também pode ser rápidamente acessado.  
 Baixe o executável no link abaixo, descompacte o arquivo e execute o **paint.exe** dentro da pasta Release.
 
