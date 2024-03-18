@@ -46,6 +46,9 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
   final double width = 300;
   final double height = 300.5;
   List<Object> lista_objetos = [];
+  List<List<Object>> savedStates = [];
+  int currentStateIndex = -1;
+  int atualStateElement = 0;
   var cut_object = null;
 
   void updateModeCutObj(dynamic value) {
@@ -53,6 +56,41 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
       cut_object = value;
     });
   }
+
+  void saveState() {
+    final currentState = lista_objetos.map((obj) => obj.clone()).toList();
+    if (currentStateIndex < savedStates.length - 1) {
+      savedStates.removeRange(currentStateIndex + 1, savedStates.length);
+    }
+    if (savedStates.length >= 10) {
+      savedStates.removeAt(0);
+    }
+    savedStates.add(currentState);
+    currentStateIndex = savedStates.length - 1;
+  }
+
+  // Método para desfazer a última alteração na lista de objetos
+  void undo() {
+    if (currentStateIndex > 0) {
+      currentStateIndex--;
+      setState(() {
+        lista_objetos =
+            savedStates[currentStateIndex].map((obj) => obj.clone()).toList();
+      });
+    }
+  }
+
+  void redo() {
+    if (currentStateIndex < savedStates.length - 1) {
+      currentStateIndex++;
+      setState(() {
+        lista_objetos =
+            savedStates[currentStateIndex].map((obj) => obj.clone()).toList();
+      });
+    }
+  }
+
+  void checkSameState(List<Object> objatual) {}
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +110,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
               attListaObject: (p0) {
                 setState(() {
                   lista_objetos = p0;
+                  saveState();
                 });
               },
               mode_recorte: widget.mode_recorte,
@@ -88,6 +127,7 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           ),
         )),
         VerticalBarScreen(
+          savedStates: savedStates,
           updateModeRecorte: (p0) {
             setState(() {
               widget.updateModeRecorte(p0);
@@ -124,6 +164,16 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
 
                 lista_objetos.add(last_polygon);
               });
+            }
+
+            if (txt_mode == "Voltar" && lista_objetos.length != 0) {
+              if (currentStateIndex > 0) {
+                undo();
+              }
+            } else if (txt_mode == "Avancar" && lista_objetos.length != 0) {
+              if (currentStateIndex < savedStates.length - 1) {
+                redo();
+              }
             }
             widget.updateStringMode(txt_mode);
           },

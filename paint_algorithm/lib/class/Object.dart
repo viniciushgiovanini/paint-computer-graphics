@@ -58,4 +58,12 @@ class Object {
       this.centralPoint = lista_de_pontos[0];
     }
   }
+
+  Object clone() {
+    final clonedObject = Object();
+    clonedObject.lista_de_pontos.addAll(lista_de_pontos);
+    clonedObject.type = type;
+    clonedObject.centralPoint = centralPoint;
+    return clonedObject;
+  }
 }

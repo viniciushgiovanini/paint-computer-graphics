@@ -17,9 +17,11 @@ class VerticalBarScreen extends StatefulWidget {
   final Function(List<Object>) attListaObject;
   final String mode_text;
   final Function(String) updateModeRecorte;
+  final List<List<Object>> savedStates;
 
   VerticalBarScreen(
       {super.key,
+      required this.savedStates,
       required this.updateModeRecorte,
       required this.mode_text,
       required this.attListaObject,
@@ -66,6 +68,12 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.cut, 35.0, () {
             widget.updateMode("Recorte");
           }),
+          getIcon(Icons.undo, 35.0, () {
+            widget.updateMode("Voltar");
+          }),
+          getIcon(Icons.redo, 35.0, () {
+            widget.updateMode("Avancar");
+          }),
           getPopUpMenuButtom([
             PopupMenuItem(value: "Translacao", child: Text("Translacao")),
             PopupMenuItem(value: "Rotacao", child: Text("Rotacao")),
@@ -95,6 +103,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.delete, 35.0, () {
             widget.points_class.clear();
             widget.lista_objetos.clear();
+            widget.savedStates.clear();
           }),
         ],
       ),
@@ -132,6 +141,9 @@ List<Object> transformacoesGeometricas(
     return lista_objetos;
   } else if (mode_text == "Reflexao") {
     Object last_obj = lista_objetos[lista_objetos.length - 1];
+    if (last_obj.centralPoint == Offset.zero) {
+      last_obj.calculateCentralPoint();
+    }
     lista_objetos.removeAt(lista_objetos.length - 1);
 
     List<Offset> new_points = [];
