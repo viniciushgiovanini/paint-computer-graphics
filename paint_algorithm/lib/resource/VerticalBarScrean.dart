@@ -118,6 +118,9 @@ List<Object> transformacoesGeometricas(
 
   if (mode_text == "Rotacao") {
     Object last_obj = lista_objetos[lista_objetos.length - 1];
+    if (last_obj.centralPoint == Offset.zero) {
+      last_obj.calculateCentralPoint();
+    }
     lista_objetos.removeAt(lista_objetos.length - 1);
 
     try {
