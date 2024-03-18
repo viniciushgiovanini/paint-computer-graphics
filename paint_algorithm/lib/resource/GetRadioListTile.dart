@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Widget para criacao dos botoes dentro do dialog
 Widget getRadioListTile(
   int value,
   int groupValue,

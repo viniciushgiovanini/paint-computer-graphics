@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import '../class/Object.dart';
 
+// Metodo que recebe o objeto e rotaciona ele de acordo com o angle passado.
 Object rotacaoObject(Object obj, double angle) {
   List<Offset> lista_de_pontos = List<Offset>.from(obj.lista_de_pontos);
 

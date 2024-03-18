@@ -9,6 +9,7 @@ import 'GetDialog.dart';
 import '../algorithms/transformacoes.dart';
 import '../class/Object.dart';
 
+// Barralateral que atualiza os modos e recebe os inputs.
 class VerticalBarScreen extends StatefulWidget {
   final List<Offset> points_class;
   final List<Object> lista_objetos;
@@ -17,9 +18,11 @@ class VerticalBarScreen extends StatefulWidget {
   final Function(List<Object>) attListaObject;
   final String mode_text;
   final Function(String) updateModeRecorte;
+  final List<List<Object>> savedStates;
 
   VerticalBarScreen(
       {super.key,
+      required this.savedStates,
       required this.updateModeRecorte,
       required this.mode_text,
       required this.attListaObject,
@@ -43,6 +46,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
+        // Icones que atualiza o modo do algoritmo
         children: [
           getIcon(Icons.settings, 35.0, () {
             getDialog(
@@ -65,6 +69,12 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           }),
           getIcon(Icons.cut, 35.0, () {
             widget.updateMode("Recorte");
+          }),
+          getIcon(Icons.undo, 35.0, () {
+            widget.updateMode("Voltar");
+          }),
+          getIcon(Icons.redo, 35.0, () {
+            widget.updateMode("Avancar");
           }),
           getPopUpMenuButtom([
             PopupMenuItem(value: "Translacao", child: Text("Translacao")),
@@ -95,6 +105,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
           getIcon(Icons.delete, 35.0, () {
             widget.points_class.clear();
             widget.lista_objetos.clear();
+            widget.savedStates.clear();
           }),
         ],
       ),
@@ -102,6 +113,7 @@ class _VerticalBarScreenState extends State<VerticalBarScreen> {
   }
 }
 
+// Metodo para gerenciar os inputs em relacao ao modo atual.
 List<Object> transformacoesGeometricas(
     String mode_text, List<Object> lista_objetos, String value) {
   // ignore: unused_local_variable
@@ -109,6 +121,9 @@ List<Object> transformacoesGeometricas(
 
   if (mode_text == "Rotacao") {
     Object last_obj = lista_objetos[lista_objetos.length - 1];
+    if (last_obj.centralPoint == Offset.zero) {
+      last_obj.calculateCentralPoint();
+    }
     lista_objetos.removeAt(lista_objetos.length - 1);
 
     try {
@@ -132,6 +147,9 @@ List<Object> transformacoesGeometricas(
     return lista_objetos;
   } else if (mode_text == "Reflexao") {
     Object last_obj = lista_objetos[lista_objetos.length - 1];
+    if (last_obj.centralPoint == Offset.zero) {
+      last_obj.calculateCentralPoint();
+    }
     lista_objetos.removeAt(lista_objetos.length - 1);
 
     List<Offset> new_points = [];

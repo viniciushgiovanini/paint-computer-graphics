@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Imports meu
-// import '../algorithms/dda.dart';
-
+// Widget: geracao de botões em cascata
 Widget getPopUpMenuButtom(
   List<PopupMenuItem<String>> listadePopUp,
   void Function(String) updateMode,

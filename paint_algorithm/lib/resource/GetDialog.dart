@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'GetRadioListTile.dart';
 
+// Arquivo para geracao do dialog de configuracoes
+
 int groupValue = 0;
 int groupValueRecorte = 0;
 
