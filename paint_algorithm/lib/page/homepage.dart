@@ -142,7 +142,6 @@ class _ViewerInteractiveState extends State<ViewerInteractive> {
           attListaObject: (p0) {
             setState(() {
               lista_objetos = p0;
-              "".toString();
             });
           },
           lista_objetos: lista_objetos,

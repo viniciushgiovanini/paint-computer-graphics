@@ -89,7 +89,6 @@ class _GetGestureMouseState extends State<GetGestureMouse> {
           recorte(widget.lista_objetos, points_unico, details);
         }
         widget.attListaObject(widget.lista_objetos);
-        "".toString();
       },
     );
   }
